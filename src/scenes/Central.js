@@ -3,34 +3,52 @@ import React, { useState } from "react";
 
 const challenges = [
   {
-    title: "CÓDIGO 01 — PRIMEIRA PISTA",
-    message: "A mensagem foi embaralhada. Qual palavra está escondida?",
-    code: "B C D",
-    hint: "Cada letra representa a letra anterior no alfabeto.",
-    options: ["ABC", "BCD", "DEF"],
+    title: "CÓDIGO 01 — MENSAGEM INVERTIDA",
+    message:
+      "Uma mensagem foi encontrada em um documento antigo. Descubra o que ela revela.",
+    code: "OÃÇAMROFNI",
+    hint:
+      "A mensagem foi escrita de trás para frente. Leia os caracteres na ordem inversa.",
+    options: ["INFORMAÇÃO", "INVESTIGAÇÃO", "COMUNICAÇÃO"],
     answer: 0,
     explanation:
-      "B representa A, C representa B e D representa C. A mensagem correta é ABC.",
+      "Ao inverter a sequência, encontramos INFORMAÇÃO. A primeira mensagem foi recuperada.",
   },
   {
-    title: "CÓDIGO 02 — ACESSO RESTRITO",
-    message: "Decifre a palavra usando a mesma lógica.",
-    code: "D B T B",
-    hint: "Volte uma letra no alfabeto para cada símbolo.",
-    options: ["CASA", "DATA", "BOLA"],
+    title: "CÓDIGO 02 — SEQUÊNCIA NUMÉRICA",
+    message:
+      "O terminal substituiu cada letra por sua posição no alfabeto. Qual palavra está escondida?",
+    code: "3 - 9 - 5 - 14 - 20 - 9 - 19 - 20 - 1",
+    hint:
+      "A = 1, B = 2, C = 3... Cada número corresponde a uma letra.",
+    options: ["CIENTISTA", "TECNOLOGIA", "PESQUISADORA"],
     answer: 0,
     explanation:
-      "DBTB, voltando uma letra em cada posição, forma CASA.",
+      "Substituindo cada número pela letra correspondente, encontramos CIENTISTA.",
   },
   {
-    title: "CÓDIGO 03 — MENSAGEM FINAL",
-    message: "O último código revela o local da próxima descoberta.",
-    code: "N V T F V",
-    hint: "Volte uma posição no alfabeto.",
-    options: ["MUSEU", "LIVRO", "DADOS"],
+    title: "CÓDIGO 03 — ESPELHO DO ALFABETO",
+    message:
+      "Este sistema criptográfico utiliza um alfabeto invertido. Recupere a palavra original.",
+    code: "W Z W L H",
+    hint:
+      "Nesta cifra, A corresponde a Z, B corresponde a Y, C corresponde a X, e assim por diante.",
+    options: ["DADOS", "CÓDIGO", "LÓGICA"],
     answer: 0,
     explanation:
-      "NVTFV, voltando uma letra, revela MUSEU. A mensagem foi decifrada!",
+      "A cifra Atbash inverte o alfabeto. W corresponde a D, Z a A, W a D, L a O e H a S. A palavra é DADOS.",
+  },
+  {
+    title: "CÓDIGO 04 — ARQUIVO SECRETO",
+    message:
+      "O último arquivo foi protegido por uma cifra de deslocamento. Descubra a mensagem.",
+    code: "V H F U H W R",
+    hint:
+      "Cada letra foi avançada três posições no alfabeto para criar o código. Para decifrar, volte três posições.",
+    options: ["SECRETO", "SISTEMA", "ARQUIVO"],
+    answer: 0,
+    explanation:
+      "Voltando três posições no alfabeto, V vira S, H vira E, F vira C, U vira R, H vira E, W vira T e R vira O. A mensagem é SECRETO!",
   },
 ];
 
@@ -86,22 +104,18 @@ export default function Central({ onExit, onComplete }) {
       setStageCorrect(true);
       setFeedback(`CORRETO! ${challenge.explanation}`);
 
-      if (stage === challengeList.length - 1) {
-        setCompleted(true);
-
-        if (onComplete) {
-          onComplete({
-            id: "central-evidencia",
-            title: "Mensagem secreta decifrada",
-            text:
-              "A central confirmou que a mensagem aponta para o museu. A sequência de três códigos foi decifrada com sucesso.",
-          });
-        }
+      if (stage === challengeList.length - 1 && onComplete) {
+        onComplete({
+          id: "central-completed",
+          title: "Central de Decodificação concluída",
+          text:
+            "Os quatro códigos foram decifrados. A investigação criptográfica foi concluída.",
+        });
       }
     } else {
       setStageCorrect(false);
       setFeedback(
-        "Código incorreto. Observe a dica e tente novamente."
+        "A decodificação não corresponde ao padrão encontrado. Analise o código novamente e tente outra hipótese."
       );
     }
   }
@@ -148,20 +162,21 @@ export default function Central({ onExit, onComplete }) {
 
             {completed ? (
               <>
-                <h2>INVESTIGAÇÃO DA CENTRAL CONCLUÍDA!</h2>
+                <h2>DECODIFICAÇÃO CONCLUÍDA!</h2>
 
                 <p>
-                  Os três códigos foram decifrados. A mensagem
-                  aponta para o Museu da Ciência.
+                  Todos os quatro arquivos foram decifrados.
+                  Você utilizou diferentes técnicas criptográficas
+                  para recuperar as mensagens.
                 </p>
 
                 <div className="central-success">
-                  ✓ EVIDÊNCIA REGISTRADA NO CADERNO
+                  ✓ DESAFIO DE DECODIFICAÇÃO CONCLUÍDO
                 </div>
 
                 <p>
-                  Você concluiu todas as etapas deste desafio.
-                  Não é necessário realizá-lo novamente.
+                  As informações recuperadas podem ajudar
+                  a solucionar o caso.
                 </p>
 
                 <button
@@ -257,7 +272,7 @@ export default function Central({ onExit, onComplete }) {
                   >
                     {stage === challengeList.length - 1
                       ? "FINALIZAR DESAFIO"
-                      : "PRÓXIMA ETAPA"}
+                      : "PRÓXIMO CÓDIGO"}
                   </button>
                 )}
               </>

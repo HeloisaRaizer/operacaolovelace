@@ -1,4 +1,3 @@
-
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap");
 
 :root {
@@ -1407,4 +1406,421 @@ button:disabled {
   .lovelace-credits span {
     font-size: 0.67rem;
   }
+}
+
+/* ==========================================
+   REFINAMENTO VISUAL — OPERAÇÃO LOVELACE
+   Arquivo completo: estilos preservados + ajustes
+   ========================================== */
+
+.home-screen {
+  min-height: 100vh;
+  padding: 28px 20px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background:
+    radial-gradient(ellipse at 78% 42%, rgba(81, 39, 107, 0.28), transparent 44%),
+    radial-gradient(circle at 16% 18%, rgba(255, 203, 56, 0.055), transparent 30%),
+    #160d20;
+}
+
+.home-content {
+  max-width: 850px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.home-content .eyebrow {
+  margin-bottom: 10px;
+  color: #d9b978;
+  font-size: 0.68rem;
+  letter-spacing: 3px;
+}
+
+.home-content h1 {
+  margin: 8px 0 14px;
+  color: #e9c77e;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(3.2rem, 8vw, 5.5rem);
+  line-height: 0.98;
+  letter-spacing: 2px;
+  text-shadow: 0 5px 25px rgba(0, 0, 0, 0.32);
+}
+
+.home-content p {
+  max-width: 430px;
+  margin: 0 auto 8px;
+  color: #c8bdcf;
+  font-size: 0.96rem;
+  line-height: 1.65;
+}
+
+.home-ada {
+  width: min(210px, 48vw);
+  height: 210px;
+  margin: 8px auto 15px;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.45));
+}
+
+.start-button {
+  min-height: 48px;
+  padding: 14px 27px;
+  border-radius: 7px;
+  background: #e8c477;
+  color: #21132f;
+  font-size: 0.77rem;
+  font-weight: 800;
+  letter-spacing: 1.1px;
+  box-shadow: 0 3px 0 #a77b32;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.start-button:hover {
+  transform: translateY(-2px);
+  background: #f4d99b;
+  box-shadow: 0 6px 15px rgba(232, 196, 119, 0.18);
+}
+
+.home-content > small {
+  margin-top: 17px;
+  color: #998ba5;
+  font-size: 0.66rem;
+  letter-spacing: 1.8px;
+}
+
+.home-content .lovelace-credits {
+  margin-top: 24px;
+  padding-top: 14px;
+  padding-bottom: 4px;
+  border-top: 1px solid rgba(232, 196, 119, 0.15);
+}
+
+.home-content .lovelace-credits strong {
+  color: #d9b978;
+}
+
+/* INTRODUÇÃO DA MISSÃO */
+
+.intro-overlay {
+  z-index: 30;
+  padding: 20px;
+  background: rgba(9, 6, 14, 0.88);
+  backdrop-filter: blur(8px);
+}
+
+.intro-card {
+  width: min(760px, 100%);
+  max-height: 90vh;
+  gap: 20px;
+  padding: 27px;
+  border: 1px solid rgba(218, 185, 120, 0.48);
+  border-radius: 12px;
+  background: #e9dfca;
+  color: #21132f;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.55);
+}
+
+.intro-card img {
+  width: 145px;
+  height: 190px;
+  flex-shrink: 0;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.14));
+}
+
+.intro-card .eyebrow {
+  color: #80613c;
+  font-size: 0.65rem;
+  letter-spacing: 1.7px;
+}
+
+.intro-card h2 {
+  margin: 9px 0 10px;
+  color: #382047;
+  font-family: "Playfair Display", serif;
+  font-size: 1.65rem;
+  line-height: 1.2;
+}
+
+.intro-card p {
+  margin: 8px 0;
+  color: #55485a;
+  font-size: 0.91rem;
+  line-height: 1.6;
+}
+
+.intro-objective {
+  margin: 13px 0;
+  padding: 12px 14px;
+  border-left: 3px solid #b18a55;
+  border-radius: 3px;
+  background: #f4ecdc;
+}
+
+.intro-objective strong {
+  color: #80613c;
+  font-size: 0.67rem;
+  letter-spacing: 1px;
+}
+
+.intro-objective span {
+  color: #514455;
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.intro-controls {
+  color: #685a6b;
+  font-size: 0.82rem !important;
+}
+
+.intro-card .start-button {
+  margin-top: 7px;
+}
+
+/* AJUSTES GERAIS PARA MANTER A INTERFACE COESA */
+
+.game-header {
+  background: #21132f;
+  border-bottom-color: rgba(232, 196, 119, 0.16);
+}
+
+.game-header h2 {
+  font-size: 1.32rem;
+}
+
+.journal-button {
+  background: #e8a05e;
+  color: #21132f;
+  box-shadow: 0 3px 0 #a85f32;
+}
+
+.journal-button:hover {
+  background: #f3b47d;
+}
+
+.city-stage {
+  padding-top: 18px;
+  padding-bottom: 12px;
+}
+
+.city-scene,
+.library-scene,
+.museum-scene {
+  border-color: rgba(218, 185, 120, 0.42);
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.32);
+}
+
+.scene-label {
+  padding: 10px 13px;
+  background: rgba(22, 13, 32, 0.91);
+  border: 1px solid rgba(255, 203, 56, 0.16);
+}
+
+.city-controls {
+  padding-top: 4px;
+}
+
+.location-marker small {
+  border-color: rgba(255, 203, 56, 0.28);
+}
+
+.modal-overlay {
+  background: rgba(8, 5, 12, 0.86);
+  backdrop-filter: blur(6px);
+}
+
+@media (max-width: 700px) {
+  .home-screen {
+    padding: 20px 14px;
+  }
+
+  .home-content {
+    padding: 12px 5px;
+  }
+
+  .home-content h1 {
+    font-size: clamp(2.8rem, 12vw, 4rem);
+  }
+
+  .home-content p {
+    font-size: 0.87rem;
+  }
+
+  .home-ada {
+    width: 165px;
+    height: 165px;
+  }
+
+  .intro-card {
+    flex-direction: column;
+    gap: 5px;
+    padding: 19px;
+    max-height: 92vh;
+    overflow-y: auto;
+    text-align: center;
+  }
+
+  .intro-card img {
+    width: 105px;
+    height: 115px;
+  }
+
+  .intro-card h2 {
+    font-size: 1.4rem;
+  }
+
+  .intro-card p {
+    font-size: 0.84rem;
+  }
+}
+
+/* ==========================================
+   NOVO MAPA DA CIDADE — OPERAÇÃO LOVELACE
+   ========================================== */
+
+.city-stage {
+  min-height: 0;
+  padding: 14px 20px 10px;
+}
+
+.city-scene {
+  width: min(1200px, 100%);
+  aspect-ratio: 1648 / 1024;
+  min-height: 0;
+  background-position: center;
+  background-size: 100% 100%;
+  image-rendering: pixelated;
+}
+
+/* Marcadores posicionados nas entradas e áreas livres do novo mapa. */
+
+.city-scene .scene-label {
+  top: 12px;
+  left: 12px;
+  max-width: min(360px, 45%);
+}
+
+@media (max-width: 700px) {
+  .city-stage {
+    padding: 10px;
+  }
+
+  .city-scene {
+    aspect-ratio: 1648 / 1024;
+    min-height: 0;
+  }
+
+  .city-scene .scene-label {
+    top: 7px;
+    left: 7px;
+    max-width: 55%;
+    padding: 6px 8px;
+  }
+
+  .city-scene .scene-label span {
+    font-size: 0.48rem;
+  }
+
+  .city-scene .scene-label strong {
+    font-size: 0.55rem;
+  }
+}
+
+.museum-challenge-card {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  top: 52%;
+  transform: translate(-50%, -50%);
+  width: min(560px, 88%);
+  max-height: 82%;
+  overflow-y: auto;
+  padding: 26px;
+  border: 2px solid #d7a34d;
+  border-radius: 16px;
+  background: rgba(27, 15, 39, 0.96);
+  color: #fff;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+}
+
+.museum-challenge-card h2 {
+  margin: 12px 0;
+  color: #f6c875;
+}
+
+.museum-challenge-card p {
+  line-height: 1.55;
+}
+
+.museum-options {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.museum-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #775b8b;
+  border-radius: 9px;
+  background: #30203e;
+  color: white;
+  text-align: left;
+  cursor: pointer;
+}
+
+.museum-option:hover,
+.museum-option.selected {
+  border-color: #f6a044;
+  background: #54334c;
+}
+
+.museum-option span {
+  display: grid;
+  place-items: center;
+  min-width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: #f28b36;
+  color: #24152d;
+  font-weight: bold;
+}
+
+.museum-progress-track {
+  height: 8px;
+  margin: 12px 0 20px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #51405e;
+}
+
+.museum-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: #f28b36;
+  transition: width 0.3s ease;
+}
+
+.museum-feedback {
+  color: #f6c875;
+  font-weight: 600;
+}
+
+.museum-trophy {
+  margin: 12px 0;
+  color: #f6c875;
+  font-size: 48px;
+  text-align: center;
+}
+
+.museum-challenge-card button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

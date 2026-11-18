@@ -1,10 +1,5 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
 
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Library from "./scenes/Library";
 import Museum from "./scenes/Museum";
 import Laboratory from "./scenes/Laboratory";
@@ -23,209 +18,128 @@ const shuffle = (items) => {
   return array;
 };
 
-const clamp = (value, min, max) =>
-  Math.max(min, Math.min(max, value));
-
-// Áreas onde os pés da Ada podem ficar.
-// Coordenadas em porcentagem da imagem da cidade.
-const WALKABLE_AREAS = [
-  // Rua horizontal
-  { left: 9, right: 91, top: 57, bottom: 71 },
-
-  // Rua central que leva à parte superior
-  { left: 35, right: 56, top: 30, bottom: 71 },
-
-  // Continuação da rua para a parte inferior
-  { left: 44, right: 59, top: 69, bottom: 88 },
-];
-
-const canWalk = (x, y) =>
-  WALKABLE_AREAS.some(
-    (area) =>
-      x >= area.left &&
-      x <= area.right &&
-      y >= area.top &&
-      y <= area.bottom
-  );
-
-const INITIAL_PLAYER = { x: 50, y: 65 };
-
-const CITY_CLUE_POSITIONS = [
-  { x: 47, y: 42 },
-  { x: 52, y: 80 },
-  { x: 62, y: 64 },
-  { x: 31, y: 65 },
-  { x: 50, y: 32 },
-];
-
-const LIBRARY_CLUE_POSITIONS = [
-  { x: 18, y: 42 },
-  { x: 35, y: 65 },
-  { x: 52, y: 38 },
-  { x: 70, y: 62 },
-  { x: 84, y: 42 },
-];
-
 const randomizeResearcher = (researcher) => {
-  const cityPositions = shuffle(CITY_CLUE_POSITIONS);
-  const libraryPositions = shuffle(LIBRARY_CLUE_POSITIONS);
+  const cityPositions = shuffle([
+    { x: 18, y: 50 },
+    { x: 82, y: 50 },
+    { x: 32, y: 85 },
+    { x: 68, y: 85 },
+    { x: 50, y: 48 },
+  ]);
+
+  const libraryPositions = shuffle([
+    { x: 18, y: 42 },
+    { x: 35, y: 65 },
+    { x: 52, y: 38 },
+    { x: 70, y: 62 },
+    { x: 84, y: 42 },
+  ]);
 
   return {
     ...researcher,
-
-    cityClues: (researcher.cityClues || []).map(
-      (clue, index) => ({
-        ...clue,
-        ...cityPositions[index % cityPositions.length],
-      })
-    ),
-
-    libraryClues: (researcher.libraryClues || []).map(
-      (clue, index) => ({
-        ...clue,
-        ...libraryPositions[index % libraryPositions.length],
-      })
-    ),
+    cityClues: (researcher.cityClues || []).map((clue, i) => ({
+      ...clue,
+      ...cityPositions[i % cityPositions.length],
+    })),
+    libraryClues: (researcher.libraryClues || []).map((clue, i) => ({
+      ...clue,
+      ...libraryPositions[i % libraryPositions.length],
+    })),
   };
 };
 
-const LAB_CLUE = {
-  id: "laboratorio-evidencia",
-  title: "Relatório de análise do laboratório",
-  text:
-    "O laboratório confirmou que as informações precisam ser comparadas, analisadas e validadas antes de uma conclusão.",
-};
-
-const CENTRAL_CLUE = {
-  id: "central-evidencia",
-  title: "Mensagem secreta decifrada",
-  text:
-    "A central confirmou que a mensagem aponta para o Museu da Ciência. A sequência de códigos foi decifrada com sucesso.",
-};
-
-function Credits() {
-  return (
-    <footer className="lovelace-credits">
-      <strong>STEAMULANDO FUTUROS 2026</strong>
-
-      <span>
-        Desenvolvido por Eduarda Vieira, Heloisa Raizer e
-        Maria Luiza Hammes Bassegio da Silva
-      </span>
-    </footer>
-  );
-}
+const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
 
 export default function App() {
   const [screen, setScreen] = useState("home");
-  const [player, setPlayer] = useState(INITIAL_PLAYER);
-
+  const [player, setPlayer] = useState({ x: 50, y: 85 });
   const [researcherDeck, setResearcherDeck] = useState([]);
-  const [currentResearcher, setCurrentResearcher] =
-    useState(null);
-
+  const [currentResearcher, setCurrentResearcher] = useState(null);
   const [caseNumber, setCaseNumber] = useState(1);
   const [clues, setClues] = useState([]);
-
+  const [completedPlaces, setCompletedPlaces] = useState([]);
   const [journalOpen, setJournalOpen] = useState(false);
   const [selectedClue, setSelectedClue] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState("");
   const [feedback, setFeedback] = useState("");
   const [introOpen, setIntroOpen] = useState(false);
 
-  const allClues = useMemo(() => {
-    if (!currentResearcher) return [];
+  const museumDone = completedPlaces.includes("museum");
 
-    return [
-      ...(currentResearcher.cityClues || []),
-      ...(currentResearcher.libraryClues || []),
-      LAB_CLUE,
-      CENTRAL_CLUE,
-    ];
-  }, [currentResearcher]);
-
-  const foundIds = useMemo(
-    () => new Set(clues.map((clue) => clue.id)),
-    [clues]
+  const allClues = useMemo(
+    () =>
+      currentResearcher
+        ? [
+            ...(currentResearcher.cityClues || []),
+            ...(currentResearcher.libraryClues || []),
+            {
+              id: "laboratorio-evidencia",
+              title: "Relatório de análise do laboratório",
+              text: "O laboratório confirmou que as informações precisam ser comparadas, analisadas e validadas antes de uma conclusão.",
+            },
+            {
+              id: "central-evidencia",
+              title: "Mensagem secreta decifrada",
+              text: "A central confirmou que a mensagem aponta para o Museu da Ciência. A sequência de códigos foi decifrada com sucesso.",
+            },
+          ]
+        : [],
+    [currentResearcher]
   );
 
-  const libraryClues = currentResearcher?.libraryClues || [];
+  const foundIds = useMemo(() => clues.map((c) => c.id), [clues]);
 
   const libraryDone =
-    libraryClues.length > 0 &&
-    libraryClues.every((clue) => foundIds.has(clue.id));
+    (currentResearcher?.libraryClues || []).length > 0 &&
+    (currentResearcher?.libraryClues || []).every((c) =>
+      foundIds.includes(c.id)
+    );
 
-  const allEvidenceFound =
-    allClues.length > 0 &&
-    allClues.every((clue) => foundIds.has(clue.id));
-
-  const cityLocations = useMemo(() => {
-    if (!currentResearcher) return [];
-
-    return [
-      {
-        id: "library",
-        name: "BIBLIOTECA",
-        x: 39,
-        y: 55,
-        type: "library",
-      },
-      {
-        id: "museum",
-        name: "MUSEU DA CIÊNCIA",
-        x: 72,
-        y: 61,
-        type: "museum",
-      },
-      {
-        id: "laboratory",
-        name: "LABORATÓRIO",
-        x: 21,
-        y: 67,
-        type: "laboratory",
-      },
-      {
-        id: "central",
-        name: "CENTRAL DE CÓDIGOS",
-        x: 82,
-        y: 67,
-        type: "central",
-      },
-      ...(currentResearcher.cityClues || []).map(
-        (clue) => ({
-          ...clue,
-          type: "clue",
-        })
-      ),
-    ];
-  }, [currentResearcher]);
-
-  const isLocationComplete = useCallback(
-    (location) => {
-      if (location.type === "library") {
-        return libraryDone;
-      }
-
-      if (location.type === "laboratory") {
-        return foundIds.has(LAB_CLUE.id);
-      }
-
-      if (location.type === "central") {
-        return foundIds.has(CENTRAL_CLUE.id);
-      }
-
-      if (location.type === "museum") {
-        return false;
-      }
-
-      return foundIds.has(location.id);
-    },
-    [libraryDone, foundIds]
+  const cityLocations = useMemo(
+    () =>
+      currentResearcher
+        ? [
+            {
+              id: "library",
+              name: "BIBLIOTECA",
+              x: 35,
+              y: 40,
+              type: "library",
+            },
+            {
+              id: "museum",
+              name: "MUSEU DA CIÊNCIA",
+              x: 65,
+              y: 40,
+              type: "museum",
+            },
+            {
+              id: "laboratory",
+              name: "LABORATÓRIO",
+              x: 35,
+              y: 78,
+              type: "laboratory",
+            },
+            {
+              id: "central",
+              name: "CENTRAL DE CÓDIGOS",
+              x: 65,
+              y: 78,
+              type: "central",
+            },
+            ...(currentResearcher.cityClues || []).map((c) => ({
+              ...c,
+              type: "clue",
+            })),
+          ]
+        : [],
+    [currentResearcher]
   );
 
   const resetCase = () => {
     setClues([]);
-    setPlayer({ ...INITIAL_PLAYER });
+    setCompletedPlaces([]);
+    setPlayer({ x: 50, y: 85 });
     setJournalOpen(false);
     setSelectedClue(null);
     setSelectedAnswer("");
@@ -242,41 +156,46 @@ export default function App() {
     setResearcherDeck(deck.slice(1));
     setCurrentResearcher(randomizeResearcher(deck[0]));
     setCaseNumber(1);
-    resetCase();
+    setClues([]);
+    setCompletedPlaces([]);
+    setPlayer({ x: 50, y: 85 });
+    setJournalOpen(false);
+    setSelectedClue(null);
+    setSelectedAnswer("");
+    setFeedback("");
+    setIntroOpen(true);
+    setScreen("city");
   };
 
   const startNextCase = () => {
-    if (researcherDeck.length === 0) {
+    if (!researcherDeck.length) {
       setCurrentResearcher(null);
       setScreen("gameComplete");
       return;
     }
 
-    setCurrentResearcher(
-      randomizeResearcher(researcherDeck[0])
-    );
-
-    setResearcherDeck((previous) => previous.slice(1));
-    setCaseNumber((previous) => previous + 1);
-
+    setCurrentResearcher(randomizeResearcher(researcherDeck[0]));
+    setResearcherDeck(researcherDeck.slice(1));
+    setCaseNumber((n) => n + 1);
     resetCase();
   };
 
   const addClue = useCallback((clue) => {
-    if (!clue?.id) return;
+    if (!clue || !clue.id) return;
 
-    setClues((previous) => {
-      if (previous.some((item) => item.id === clue.id)) {
-        return previous;
-      }
-
-      return [...previous, clue];
-    });
+    setClues((prev) =>
+      prev.some((item) => item.id === clue.id) ? prev : [...prev, clue]
+    );
   }, []);
 
-  // Movimento sem atravessar estruturas.
+  const markPlaceComplete = useCallback((id) => {
+    setCompletedPlaces((prev) =>
+      prev.includes(id) ? prev : [...prev, id]
+    );
+  }, []);
+
   const movePlayer = useCallback((key) => {
-    const directions = {
+    const dirs = {
       arrowup: [0, -1],
       w: [0, -1],
       arrowdown: [0, 1],
@@ -287,92 +206,75 @@ export default function App() {
       d: [1, 0],
     };
 
-    const direction = directions[key.toLowerCase()];
+    const dir = dirs[key.toLowerCase()];
+    if (!dir) return;
 
-    if (!direction) return;
+    setPlayer((prev) => {
+      const next = {
+        x: clamp(prev.x + dir[0] * 2.5, 5, 95),
+        y: clamp(prev.y + dir[1] * 2.5, 5, 95),
+      };
 
-    const SPEED = 1.7;
+      const onMainStreet = next.y >= 43 && next.y <= 57;
+      const onCentralStreet = next.x >= 45 && next.x <= 57;
+      const onLowerStreet = next.y >= 82 && next.y <= 92;
 
-    setPlayer((previous) => {
-      const nextX = clamp(
-        previous.x + direction[0] * SPEED,
-        0,
-        100
-      );
-
-      const nextY = clamp(
-        previous.y + direction[1] * SPEED,
-        0,
-        100
-      );
-
-      // Só permite andar se o destino for uma rua.
-      if (canWalk(nextX, nextY)) {
-        return { x: nextX, y: nextY };
+      if (onMainStreet || onCentralStreet || onLowerStreet) {
+        return next;
       }
 
-      // Caso contrário, permanece na posição atual.
-      return previous;
+      return prev;
     });
   }, []);
 
   const openLocation = useCallback(
     (location) => {
-      if (!location || isLocationComplete(location)) {
-        return;
-      }
-
       if (location.type === "library") {
-        setScreen("library");
+        if (!libraryDone && !completedPlaces.includes("library")) {
+          setScreen("library");
+        }
         return;
       }
 
       if (location.type === "museum") {
-        setScreen("museum");
+        if (!museumDone) setScreen("museum");
         return;
       }
 
       if (location.type === "laboratory") {
-        setScreen("laboratory");
+        if (!completedPlaces.includes("laboratory")) {
+          setScreen("laboratory");
+        }
         return;
       }
 
       if (location.type === "central") {
-        setScreen("central");
+        if (!completedPlaces.includes("central")) {
+          setScreen("central");
+        }
         return;
       }
 
-      if (location.type === "clue") {
+      if (!foundIds.includes(location.id)) {
         setSelectedClue(location);
       }
     },
-    [isLocationComplete]
+    [libraryDone, completedPlaces, foundIds, museumDone]
   );
 
   const interact = useCallback(() => {
-    if (
-      !currentResearcher ||
-      introOpen ||
-      journalOpen ||
-      selectedClue
-    ) {
+    if (!currentResearcher || introOpen || journalOpen || selectedClue) {
       return;
     }
 
-    const nearbyLocations = cityLocations
-      .filter((location) => !isLocationComplete(location))
-      .map((location) => ({
-        ...location,
-        distance: Math.hypot(
-          player.x - location.x,
-          player.y - location.y
-        ),
+    const nearest = cityLocations
+      .map((l) => ({
+        ...l,
+        distance: Math.hypot(player.x - l.x, player.y - l.y),
       }))
-      .sort((a, b) => a.distance - b.distance);
+      .sort((a, b) => a.distance - b.distance)[0];
 
-    const nearest = nearbyLocations[0];
-
-    if (nearest && nearest.distance <= 13) {
+    if (nearest && nearest.distance <= 18) {
       openLocation(nearest);
     }
   }, [
@@ -382,29 +284,28 @@ export default function App() {
     selectedClue,
     cityLocations,
     player,
-    isLocationComplete,
     openLocation,
   ]);
 
   useEffect(() => {
-    if (screen !== "city") return undefined;
+    if (screen !== "city") return;
 
-    const keyDown = (event) => {
-      const key = event.key.toLowerCase();
+    const keyDown = (e) => {
+      const key = e.key.toLowerCase();
 
-      const movementKeys = [
-        "arrowup",
-        "arrowdown",
-        "arrowleft",
-        "arrowright",
-        "w",
-        "a",
-        "s",
-        "d",
-      ];
-
-      if (movementKeys.includes(key)) {
-        event.preventDefault();
+      if (
+        [
+          "arrowup",
+          "arrowdown",
+          "arrowleft",
+          "arrowright",
+          "w",
+          "a",
+          "s",
+          "d",
+        ].includes(key)
+      ) {
+        e.preventDefault();
 
         if (!introOpen && !journalOpen && !selectedClue) {
           movePlayer(key);
@@ -412,7 +313,7 @@ export default function App() {
       }
 
       if (key === "e" || key === " ") {
-        event.preventDefault();
+        e.preventDefault();
         interact();
       }
 
@@ -424,8 +325,7 @@ export default function App() {
 
     window.addEventListener("keydown", keyDown);
 
-    return () =>
-      window.removeEventListener("keydown", keyDown);
+    return () => window.removeEventListener("keydown", keyDown);
   }, [
     screen,
     movePlayer,
@@ -441,11 +341,15 @@ export default function App() {
       return;
     }
 
-    if (
-      Number(selectedAnswer) ===
-      Number(currentResearcher.answer)
-    ) {
-      setFeedback("");
+    if (Number(selectedAnswer) === currentResearcher.answer) {
+      if (!museumDone) {
+        setFeedback(
+          "Hipótese correta! Antes de concluir o caso, complete a fase bônus no Museu da Ciência."
+        );
+        return;
+      }
+
+      setFeedback("Acertou! As evidências confirmam sua hipótese.");
       setScreen("result");
     } else {
       setFeedback(
@@ -469,8 +373,8 @@ export default function App() {
           </h1>
 
           <p>
-            Uma investigação pela cidade. Pistas escondidas.
-            Uma mente brilhante para encontrar.
+            Uma investigação pela cidade. Pistas escondidas. Uma mente
+            brilhante para encontrar.
           </p>
 
           <img
@@ -479,16 +383,11 @@ export default function App() {
             alt="Ada Lovelace"
           />
 
-          <button
-            className="start-button"
-            onClick={startFirstCase}
-          >
+          <button className="start-button" onClick={startFirstCase}>
             INICIAR NOVA INVESTIGAÇÃO
           </button>
 
           <small>EXPLORE · INVESTIGUE · DESCUBRA</small>
-
-          <Credits />
         </div>
       </main>
     );
@@ -499,25 +398,21 @@ export default function App() {
       <main className="result-screen">
         <section className="result-card game-complete-card">
           <span className="eyebrow">OPERAÇÃO LOVELACE</span>
-
           <div className="completion-star">★</div>
 
           <h1>Você concluiu a investigação!</h1>
 
           <p>
-            Todos os casos foram solucionados. As histórias
-            e contribuições dessas pesquisadoras agora fazem
-            parte do arquivo da Operação Lovelace.
+            Todos os casos foram solucionados. As histórias e contribuições
+            dessas pesquisadoras agora fazem parte do arquivo da Operação
+            Lovelace.
           </p>
 
           <p className="completion-message">
             Parabéns, detetive. Missão cumprida!
           </p>
 
-          <button
-            className="start-button"
-            onClick={startFirstCase}
-          >
+          <button className="start-button" onClick={startFirstCase}>
             JOGAR NOVAMENTE
           </button>
 
@@ -546,10 +441,7 @@ export default function App() {
         <main className="game-screen">
           <header className="game-header">
             <div>
-              <span className="eyebrow">
-                OPERAÇÃO LOVELACE
-              </span>
-
+              <span className="eyebrow">OPERAÇÃO LOVELACE</span>
               <h2>
                 CASO {String(caseNumber).padStart(3, "0")} ·{" "}
                 {currentResearcher.name}
@@ -574,51 +466,60 @@ export default function App() {
               <div className="scene-label">
                 <span>LOCAL: CENTRO DA CIDADE</span>
                 <strong>
-                  Explore as ruas e investigue os locais marcados
+                  Investigue os locais marcados para encontrar evidências
                 </strong>
               </div>
 
               {cityLocations.map((location) => {
-                const done = isLocationComplete(location);
+                const found = foundIds.includes(location.id);
 
-                const icons = {
-                  library: "▤",
-                  museum: "⚙",
-                  laboratory: "⚗",
-                  central: "⌘",
-                  clue: "⌕",
-                };
+                const done =
+                  (location.type === "library" &&
+                    (libraryDone || completedPlaces.includes("library"))) ||
+                  (location.type === "museum" && museumDone) ||
+                  (location.type === "laboratory" &&
+                    completedPlaces.includes("laboratory")) ||
+                  (location.type === "central" &&
+                    completedPlaces.includes("central"));
+
+                const disabled = found || done;
 
                 return (
                   <button
                     key={location.id}
-                    className={`location-marker ${
-                      location.type
-                    }-marker ${done ? "found" : ""}`}
+                    className={`location-marker ${location.type}-marker ${
+                      disabled ? "found" : ""
+                    }`}
                     style={{
                       left: `${location.x}%`,
                       top: `${location.y}%`,
                     }}
                     onClick={() => openLocation(location)}
-                    disabled={done}
+                    disabled={disabled}
                     title={
-                      done
+                      disabled
                         ? "Desafio concluído"
-                        : `Investigar ${
-                            location.name || location.title
-                          }`
+                        : `Investigar ${location.name || location.title}`
                     }
                   >
                     <span>
-                      {done
+                      {disabled
                         ? "✓"
-                        : icons[location.type] || "⌕"}
+                        : location.type === "library"
+                        ? "⌂"
+                        : location.type === "museum"
+                        ? "⚙"
+                        : location.type === "laboratory"
+                        ? "⚗"
+                        : location.type === "central"
+                        ? "⌘"
+                        : "?"}
                     </span>
 
                     <small>
-                      {done
+                      {disabled
                         ? "CONCLUÍDO"
-                        : location.name || "PISTA"}
+                        : location.name || location.title}
                     </small>
                   </button>
                 );
@@ -642,8 +543,7 @@ export default function App() {
 
           <div className="city-controls">
             <span>
-              WASD ou SETAS: movimentar · E: investigar
-              um local próximo
+              WASD ou SETAS: movimentar · E: investigar o local próximo
             </span>
 
             <button
@@ -653,8 +553,6 @@ export default function App() {
               ABRIR CADERNO
             </button>
           </div>
-
-          <Credits />
         </main>
       )}
 
@@ -663,26 +561,44 @@ export default function App() {
           researcher={currentResearcher}
           clues={clues}
           onClue={addClue}
-          onExit={() => setScreen("city")}
+          onExit={() => {
+            const done = (currentResearcher.libraryClues || []).every((c) =>
+              clues.some((item) => item.id === c.id)
+            );
+
+            if (done) markPlaceComplete("library");
+
+            setScreen("city");
+          }}
           onOpenJournal={() => setJournalOpen(true)}
         />
       )}
 
       {screen === "museum" && (
-        <Museum onExit={() => setScreen("city")} />
+        <Museum
+          researcher={currentResearcher}
+          onExit={() => setScreen("city")}
+          onComplete={() => markPlaceComplete("museum")}
+        />
       )}
 
       {screen === "laboratory" && (
         <Laboratory
           onExit={() => setScreen("city")}
-          onComplete={addClue}
+          onComplete={(clue) => {
+            addClue(clue);
+            markPlaceComplete("laboratory");
+          }}
         />
       )}
 
       {screen === "central" && (
         <Central
           onExit={() => setScreen("city")}
-          onComplete={addClue}
+          onComplete={(clue) => {
+            addClue(clue);
+            markPlaceComplete("central");
+          }}
         />
       )}
 
@@ -697,46 +613,35 @@ export default function App() {
             <p>{currentResearcher.question}</p>
 
             <div className="answer-options">
-              {currentResearcher.options.map(
-                (option, index) => (
-                  <label
-                    key={`${index}-${option}`}
-                    className={`answer-option ${
-                      selectedAnswer === String(index)
-                        ? "selected"
-                        : ""
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="researcher"
-                      value={index}
-                      checked={
-                        selectedAnswer === String(index)
-                      }
-                      onChange={(event) => {
-                        setSelectedAnswer(event.target.value);
-                        setFeedback("");
-                      }}
-                    />
+              {currentResearcher.options.map((option, index) => (
+                <label
+                  key={option}
+                  className={`answer-option ${
+                    selectedAnswer === String(index) ? "selected" : ""
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="researcher"
+                    value={index}
+                    checked={selectedAnswer === String(index)}
+                    onChange={(e) => {
+                      setSelectedAnswer(e.target.value);
+                      setFeedback("");
+                    }}
+                  />
 
-                    <span>{option}</span>
-                  </label>
-                )
-              )}
+                  <span>{option}</span>
+                </label>
+              ))}
             </div>
 
             {feedback && (
-              <p className="feedback-message">
-                {feedback}
-              </p>
+              <p className="feedback-message">{feedback}</p>
             )}
 
             <div className="modal-actions">
-              <button
-                className="start-button"
-                onClick={handleAnswer}
-              >
+              <button className="start-button" onClick={handleAnswer}>
                 CONFIRMAR HIPÓTESE
               </button>
 
@@ -758,21 +663,15 @@ export default function App() {
         <main className="result-screen">
           <div className="result-card">
             <span className="eyebrow">
-              CASO RESOLVIDO · {caseNumber} DE{" "}
-              {researchers.length}
+              CASO RESOLVIDO · {caseNumber} DE {researchers.length}
             </span>
 
             <h1>Investigação concluída!</h1>
 
             <div className="result-profile">
               <span className="result-symbol">✦</span>
-
               <h2>{currentResearcher.name}</h2>
-
-              <p className="result-area">
-                {currentResearcher.area}
-              </p>
-
+              <p className="result-area">{currentResearcher.area}</p>
               <p>{currentResearcher.institution}</p>
               <p>{currentResearcher.description}</p>
             </div>
@@ -782,10 +681,7 @@ export default function App() {
               <p>{currentResearcher.explanation}</p>
             </div>
 
-            <button
-              className="start-button"
-              onClick={startNextCase}
-            >
+            <button className="start-button" onClick={startNextCase}>
               {researcherDeck.length
                 ? "INVESTIGAR PRÓXIMO CASO"
                 : "FINALIZAR OPERAÇÃO"}
@@ -811,10 +707,7 @@ export default function App() {
             />
 
             <div className="dialogue-content">
-              <span className="eyebrow">
-                ADA • NOVA DESCOBERTA
-              </span>
-
+              <span className="eyebrow">ADA • NOVA DESCOBERTA</span>
               <h2>{selectedClue.title}</h2>
               <p>{selectedClue.text}</p>
 
@@ -852,10 +745,7 @@ export default function App() {
               ×
             </button>
 
-            <span className="eyebrow">
-              OPERAÇÃO LOVELACE
-            </span>
-
+            <span className="eyebrow">OPERAÇÃO LOVELACE</span>
             <h2>Caderno de investigação</h2>
 
             <p className="journal-progress">
@@ -871,8 +761,7 @@ export default function App() {
                 style={{
                   width: `${
                     allClues.length
-                      ? (clues.length / allClues.length) *
-                        100
+                      ? (clues.length / allClues.length) * 100
                       : 0
                   }%`,
                 }}
@@ -881,17 +770,13 @@ export default function App() {
 
             {clues.length === 0 && (
               <p className="empty-journal">
-                Ainda não há evidências. Explore a cidade
-                e seus locais.
+                Ainda não há evidências. Explore a cidade e seus locais.
               </p>
             )}
 
             <div className="journal-list">
               {clues.map((clue) => (
-                <article
-                  className="journal-clue"
-                  key={clue.id}
-                >
+                <article className="journal-clue" key={clue.id}>
                   <span>EVIDÊNCIA REGISTRADA</span>
                   <h3>{clue.title}</h3>
                   <p>{clue.text}</p>
@@ -899,27 +784,31 @@ export default function App() {
               ))}
             </div>
 
-            {allEvidenceFound ? (
-              <button
-                className="start-button"
-                onClick={() => {
-                  setJournalOpen(false);
-                  setSelectedAnswer("");
-                  setFeedback("");
-                  setScreen("deduction");
-                }}
-              >
-                ANALISAR E RESOLVER O CASO
-              </button>
+            {clues.length === allClues.length ? (
+              <>
+                <p className="journal-reminder">
+                  {museumDone
+                    ? "Fase bônus concluída! Você já pode resolver o caso."
+                    : "As sete evidências foram encontradas. Visite o Museu da Ciência para liberar a etapa final."}
+                </p>
+
+                <button
+                  className="start-button"
+                  disabled={!museumDone}
+                  onClick={() => {
+                    setJournalOpen(false);
+                    setSelectedAnswer("");
+                    setFeedback("");
+                    setScreen("deduction");
+                  }}
+                >
+                  ANALISAR E RESOLVER O CASO
+                </button>
+              </>
             ) : (
               <p className="journal-reminder">
-                Encontre mais{" "}
-                {
-                  allClues.filter(
-                    (clue) => !foundIds.has(clue.id)
-                  ).length
-                }{" "}
-                evidência(s) para liberar a análise final.
+                Encontre mais {allClues.length - clues.length} evidência(s)
+                para liberar a análise final.
               </p>
             )}
           </div>
@@ -943,26 +832,22 @@ export default function App() {
               <h2>Temos um mistério para resolver!</h2>
 
               <p>
-                Detetive, há pistas escondidas pela cidade.
-                Investigue os locais marcados, reúna as
-                evidências no caderno e descubra qual
-                pesquisadora está ligada a este caso.
+                Detetive, há pistas escondidas pela cidade. Investigue os
+                locais marcados, reúna as evidências no caderno e descubra
+                qual pesquisadora está ligada a este caso.
               </p>
 
               <div className="intro-objective">
                 <strong>SEU PRIMEIRO OBJETIVO</strong>
-
                 <span>
-                  Explore as ruas e investigue os locais
-                  identificados por placas.
+                  Encontre um dos locais marcados com símbolos e investigue-o.
                 </span>
               </div>
 
               <p className="intro-controls">
-                Use <strong>WASD</strong> ou as{" "}
-                <strong>setas</strong> para movimentar Ada.
-                Pressione <strong>E</strong> perto de um
-                local para investigar.
+                Use <strong>WASD</strong> ou as <strong>setas</strong> para
+                movimentar Ada. Pressione <strong>E</strong> perto de um local
+                para investigar.
               </p>
 
               <button
