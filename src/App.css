@@ -2982,3 +2982,454 @@ button:disabled {
     max-width: 100%;
   }
 }
+/* OBJETIVO DA INVESTIGAÇÃO — REFINAMENTO VISUAL */
+.scene-label {
+  width: 255px;
+  max-width: 42%;
+  padding: 12px 15px;
+  gap: 7px;
+
+  background: rgba(24, 16, 34, 0.94);
+  border: 1px solid rgba(205, 180, 145, 0.22);
+  border-left: 3px solid #d6a34d;
+  border-radius: 5px;
+
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.25);
+}
+
+.scene-label span {
+  color: #d6a34d;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+}
+
+.scene-label strong {
+  color: #f0e8f4;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 0.15px;
+}
+
+@media (max-width: 700px) {
+  .scene-label {
+    width: 220px;
+    max-width: 70%;
+    padding: 9px 11px;
+  }
+
+  .scene-label span {
+    font-size: 8px;
+  }
+
+  .scene-label strong {
+    font-size: 10px;
+    line-height: 1.5;
+  }
+}
+/* === PAINEL DE MISSÃO - OPERAÇÃO LOVELACE === */
+.city-scene .scene-label {
+  width: 265px !important;
+  max-width: 40% !important;
+  box-sizing: border-box !important;
+  padding: 13px 15px !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+
+  background: #1b1227 !important;
+  border: 1px solid #49365c !important;
+  border-left: 4px solid #e5a84b !important;
+  border-radius: 3px !important;
+
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+.city-scene .scene-label span {
+  display: block !important;
+  color: #e5a84b !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  letter-spacing: 1.5px !important;
+  line-height: 1.4 !important;
+  text-transform: uppercase !important;
+}
+
+.city-scene .scene-label strong {
+  display: block !important;
+  color: #f0eaf5 !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  line-height: 1.65 !important;
+  letter-spacing: 0.2px !important;
+}
+
+@media (max-width: 700px) {
+  .city-scene .scene-label {
+    width: 230px !important;
+    max-width: 65% !important;
+    padding: 10px 12px !important;
+  }
+
+  .city-scene .scene-label strong {
+    font-size: 10px !important;
+  }
+}
+/* CORREÇÃO: BIBLIOTECA CABENDO NA TELA */
+.library-screen {
+  height: 100vh;
+  min-height: 0 !important;
+  overflow: hidden;
+}
+
+.library-stage {
+  flex: 1;
+  min-height: 0 !important;
+  padding: 12px 20px;
+  overflow: hidden;
+}
+
+.library-scene {
+  width: auto;
+  height: 100%;
+  max-width: 1200px;
+  max-height: 100%;
+  min-height: 0 !important;
+  aspect-ratio: 16 / 9;
+}
+
+.library-footer {
+  flex-shrink: 0;
+  padding: 10px 4% 14px;
+  gap: 12px;
+}
+
+.library-footer p {
+  margin: 0;
+}
+
+.library-footer button {
+  flex-shrink: 0;
+}
+
+/* Telas menores */
+@media (max-height: 800px) {
+  .library-stage {
+    padding: 8px 16px;
+  }
+
+  .library-footer {
+    padding: 8px 4%;
+  }
+
+  .library-scene {
+    max-height: calc(100vh - 250px);
+  }
+}
+.library-screen .journal-button {
+  display: none !important;
+}
+/* ETAPA FINAL — PAINEL SEM ROLAGEM */
+.deduction-screen {
+  height: 100vh;
+  min-height: 0;
+  box-sizing: border-box;
+  padding: 12px;
+  overflow: hidden;
+}
+
+.deduction-card {
+  width: 100%;
+  max-width: 720px;
+  max-height: calc(100vh - 24px) !important;
+  height: auto;
+  box-sizing: border-box;
+  overflow: visible !important;
+  padding: 24px 28px !important;
+}
+
+/* Título */
+.deduction-card h1 {
+  margin: 8px 0 12px !important;
+  font-size: 1.8rem;
+}
+
+/* Pergunta */
+.deduction-card > p {
+  margin: 8px 0 14px !important;
+  font-size: 0.95rem;
+  line-height: 1.5 !important;
+}
+
+/* Alternativas */
+.deduction-card .answer-options {
+  gap: 8px !important;
+  margin-top: 16px !important;
+}
+
+.deduction-card .answer-option {
+  padding: 11px 13px !important;
+  min-height: 0;
+  gap: 10px;
+}
+
+.deduction-card .answer-option span {
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* Botões */
+.deduction-card .modal-actions {
+  margin-top: 16px !important;
+  gap: 10px;
+}
+
+/* Telas com pouca altura */
+@media (max-height: 800px) {
+  .deduction-card {
+    padding: 18px 22px !important;
+  }
+
+  .deduction-card h1 {
+    font-size: 1.55rem;
+    margin: 6px 0 9px !important;
+  }
+
+  .deduction-card .answer-option {
+    padding: 9px 12px !important;
+  }
+
+  .deduction-card .answer-options {
+    margin-top: 12px !important;
+    gap: 7px !important;
+  }
+}
+/* =====================================
+   LABORATÓRIO DIGITAL — LAYOUT COMPACTO
+   Remove rolagem interna do terminal
+===================================== */
+
+.laboratory-console-compact {
+  width: min(600px, 88%) !important;
+  max-height: none !important;
+  height: auto !important;
+  overflow: visible !important;
+  box-sizing: border-box;
+  padding: 18px 22px !important;
+}
+
+/* Título */
+.laboratory-console-compact h2 {
+  font-size: clamp(1.25rem, 2vw, 1.65rem) !important;
+  margin: 6px 0 8px !important;
+}
+
+/* Progresso */
+.laboratory-console-compact .laboratory-progress {
+  margin: 6px 0 !important;
+  font-size: 0.72rem;
+}
+
+.laboratory-console-compact .progress-track {
+  margin: 6px 0 10px !important;
+}
+
+/* Pergunta */
+.laboratory-console-compact .laboratory-question {
+  font-size: 0.88rem !important;
+  line-height: 1.4 !important;
+  margin: 8px 0 12px !important;
+}
+
+/* Alternativas */
+.laboratory-console-compact .laboratory-options-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 7px !important;
+  margin: 10px 0 !important;
+}
+
+.laboratory-console-compact .laboratory-option {
+  min-height: auto !important;
+  padding: 9px 11px !important;
+  font-size: 0.82rem !important;
+  line-height: 1.35 !important;
+  gap: 9px !important;
+}
+
+/* Letras A, B, C */
+.laboratory-console-compact .laboratory-option span {
+  flex-shrink: 0;
+}
+
+/* Feedback */
+.laboratory-console-compact .laboratory-feedback {
+  margin: 8px 0 !important;
+  padding: 9px 11px !important;
+  font-size: 0.8rem !important;
+  line-height: 1.4 !important;
+}
+
+/* Botão principal */
+.laboratory-console-compact .start-button {
+  width: 100%;
+  margin-top: 10px !important;
+  padding: 12px !important;
+}
+
+/* Telas menores/baixas */
+@media (max-height: 800px) {
+  .laboratory-console-compact {
+    padding: 14px 18px !important;
+  }
+
+  .laboratory-console-compact h2 {
+    font-size: 1.3rem !important;
+    margin: 4px 0 6px !important;
+  }
+
+  .laboratory-console-compact .laboratory-option {
+    padding: 8px 10px !important;
+  }
+
+  .laboratory-console-compact .laboratory-question {
+    margin: 6px 0 9px !important;
+  }
+}
+/* ===== AJUSTE DO CENTRAL DE DECODIFICAÇÃO ===== */
+
+.central-stage {
+  min-height: auto !important;
+  padding: 15px !important;
+}
+
+.central-scene {
+  min-height: 560px !important;
+  height: auto !important;
+  padding: 20px !important;
+}
+
+.central-console {
+  max-height: none !important;
+  height: auto !important;
+  overflow-y: visible !important;
+  overflow-x: hidden !important;
+  width: min(720px, 95%) !important;
+  padding: 22px !important;
+  margin: auto !important;
+}
+
+.central-console h2 {
+  font-size: clamp(1.25rem, 2.2vw, 2rem) !important;
+  line-height: 1.25 !important;
+  margin: 8px 0 12px !important;
+}
+
+.central-console p {
+  font-size: 0.95rem !important;
+  line-height: 1.45 !important;
+  margin: 10px 0 !important;
+}
+
+.central-code {
+  font-size: clamp(1.2rem, 2.5vw, 1.7rem) !important;
+  letter-spacing: 5px !important;
+  padding: 16px !important;
+  margin: 12px 0 !important;
+}
+
+.central-options {
+  gap: 8px !important;
+  margin: 12px 0 !important;
+}
+
+.central-option {
+  padding: 10px 12px !important;
+  min-height: 48px !important;
+  font-size: 0.9rem !important;
+}
+
+.central-feedback,
+.central-hint {
+  padding: 10px !important;
+  margin: 10px 0 !important;
+  font-size: 0.9rem !important;
+  line-height: 1.4 !important;
+}
+
+.central-console .start-button,
+.central-console .close-button {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* Telas menores */
+@media (max-width: 768px) {
+  .central-scene {
+    min-height: auto !important;
+    padding: 10px !important;
+  }
+
+  .central-console {
+    width: 100% !important;
+    padding: 15px !important;
+  }
+
+  .central-code {
+    letter-spacing: 3px !important;
+    font-size: 1.2rem !important;
+  }
+}
+
+/* CENTRAL — TAMANHO COMPACTO */
+.central-console {
+  width: min(620px, 88%) !important;
+  padding: 16px !important;
+  margin: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+.central-console h2 {
+  font-size: 1.45rem !important;
+  margin: 6px 0 8px !important;
+  line-height: 1.2 !important;
+}
+
+.central-console p {
+  font-size: 0.88rem !important;
+  margin: 8px 0 !important;
+  line-height: 1.35 !important;
+}
+
+.central-code {
+  font-size: 1.25rem !important;
+  padding: 10px !important;
+  margin: 8px 0 !important;
+  letter-spacing: 3px !important;
+}
+
+.central-options {
+  gap: 6px !important;
+  margin: 8px 0 !important;
+}
+
+.central-option {
+  min-height: 42px !important;
+  padding: 8px 10px !important;
+  font-size: 0.82rem !important;
+}
+
+.central-hint,
+.central-feedback {
+  padding: 8px !important;
+  margin: 8px 0 !important;
+  font-size: 0.82rem !important;
+}
+
+.central-console .start-button {
+  padding: 12px !important;
+  margin-top: 8px !important;
+}

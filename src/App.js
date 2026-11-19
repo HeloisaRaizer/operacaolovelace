@@ -446,13 +446,13 @@ export default function App() {
       {screen === "city" && (
         <main className="game-screen">
           <header className="game-header">
-            <div>
-              <span className="eyebrow">OPERAÇÃO LOVELACE</span>
-              <h2>
-                CASO {String(caseNumber).padStart(3, "0")} ·{" "}
-                {currentResearcher.name}
-              </h2>
-            </div>
+            <div className="case-heading">
+  <span className="eyebrow">ARQUIVO DE INVESTIGAÇÃO · OPERAÇÃO LOVELACE</span>
+  <h2>
+    DOSSIÊ {String(caseNumber).padStart(3, "0")} —{" "}
+    {currentResearcher.name}
+  </h2>
+    </div>
 
             <button
               className="journal-button"
@@ -482,13 +482,7 @@ export default function App() {
                   zIndex: 20,
                 }}
               >
-                <div className="campaign-progress-heading">
-                  <span>CAMPANHA</span>
-                  <strong>
-                    CASO {String(caseNumber).padStart(2, "0")} /{" "}
-                    {researchers.length}
-                  </strong>
-                </div>
+                
 
                 <div
                   className="campaign-progress-track"
@@ -505,13 +499,7 @@ export default function App() {
                   ))}
                 </div>
 
-                <small>
-                  {caseNumber === 1
-                    ? "Primeiro caso da operação"
-                    : `${caseNumber - 1} caso(s) concluído(s)`}
-                  {" · "}
-                  {researchers.length - caseNumber} restante(s) após este
-                </small>
+              
               </div>
 
               {/* OBJETIVO — POSICIONADO NO CANTO INFERIOR ESQUERDO */}
@@ -528,9 +516,10 @@ export default function App() {
                   zIndex: 20,
                 }}
               >
-                <span>LOCAL: CENTRO DA CIDADE</span>
+                <span>OBJETIVO DA INVESTIGAÇÃO</span>
                 <strong>
-                  Investigue os locais marcados para encontrar evidências
+                   Explore os locais da cidade, reúna pistas e analise
+  e                 vidências para desvendar o caso da pesquisadora.
                 </strong>
               </div>
 

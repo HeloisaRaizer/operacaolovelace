@@ -121,7 +121,7 @@ export default function Laboratory({ onExit, onComplete }) {
             backgroundImage: `url("${process.env.PUBLIC_URL}/cenarios/laboratorio.png")`,
           }}
         >
-          <div className="laboratory-console">
+          <div className="laboratory-console laboratory-console-compact">
             <span className="eyebrow">TERMINAL DE ANÁLISE</span>
 
             {completed ? (
@@ -167,9 +167,11 @@ export default function Laboratory({ onExit, onComplete }) {
                   />
                 </div>
 
-                <p>{challenge.description}</p>
+                <p className="laboratory-question">
+                  {challenge.description}
+                </p>
 
-                <div className="laboratory-options">
+                <div className="laboratory-options laboratory-options-compact">
                   {challenge.options.map((option, index) => (
                     <button
                       key={option}
