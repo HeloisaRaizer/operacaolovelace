@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 
 const challenges = [
@@ -46,14 +45,12 @@ const challenges = [
   },
 ];
 
-export default function Laboratory({
-  onExit,
-  onComplete,
-}) {
+export default function Laboratory({ onExit, onComplete }) {
   const [challengeIndex, setChallengeIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState("");
   const [feedback, setFeedback] = useState("");
   const [completed, setCompleted] = useState(false);
+  const [answerCorrect, setAnswerCorrect] = useState(false);
 
   const challenge = challenges[challengeIndex];
 
@@ -64,6 +61,7 @@ export default function Laboratory({
     }
 
     if (Number(selectedAnswer) === challenge.answer) {
+      setAnswerCorrect(true);
       setFeedback(`CORRETO! ${challenge.explanation}`);
 
       if (challengeIndex === challenges.length - 1) {
@@ -79,6 +77,7 @@ export default function Laboratory({
         }
       }
     } else {
+      setAnswerCorrect(false);
       setFeedback(
         "Resultado incorreto. Analise novamente as informações e tente outra alternativa."
       );
@@ -86,9 +85,12 @@ export default function Laboratory({
   };
 
   const nextChallenge = () => {
+    if (!answerCorrect) return;
+
     setChallengeIndex((previous) => previous + 1);
     setSelectedAnswer("");
     setFeedback("");
+    setAnswerCorrect(false);
   };
 
   const restartChallenge = () => {
@@ -96,6 +98,7 @@ export default function Laboratory({
     setSelectedAnswer("");
     setFeedback("");
     setCompleted(false);
+    setAnswerCorrect(false);
   };
 
   return (
@@ -121,17 +124,15 @@ export default function Laboratory({
           <div className="laboratory-console">
             <span className="eyebrow">TERMINAL DE ANÁLISE</span>
 
-            <h2>
-              {completed
-                ? "ANÁLISE CONCLUÍDA"
-                : challenge.title}
-            </h2>
-
             {completed ? (
-              <>
+              <div className="laboratory-completion">
+                <div className="laboratory-success-icon">✓</div>
+
+                <h2>ANÁLISE CONCLUÍDA</h2>
+
                 <p>
-                  Todos os desafios foram concluídos. O relatório
-                  foi liberado para a investigação.
+                  Todos os desafios foram concluídos. O relatório foi liberado
+                  para a investigação.
                 </p>
 
                 <div className="laboratory-success">
@@ -139,22 +140,18 @@ export default function Laboratory({
                   <strong>EVIDÊNCIA DESBLOQUEADA</strong>
                 </div>
 
-                <button
-                  className="start-button"
-                  onClick={onExit}
-                >
+                <button className="start-button" onClick={onExit}>
                   CONTINUAR INVESTIGAÇÃO
                 </button>
 
-                <button
-                  className="close-button"
-                  onClick={restartChallenge}
-                >
+                <button className="close-button" onClick={restartChallenge}>
                   REFAZER DESAFIOS
                 </button>
-              </>
+              </div>
             ) : (
               <>
+                <h2>{challenge.title}</h2>
+
                 <div className="laboratory-progress">
                   DESAFIO {challengeIndex + 1} DE {challenges.length}
                 </div>
@@ -176,10 +173,9 @@ export default function Laboratory({
                   {challenge.options.map((option, index) => (
                     <button
                       key={option}
+                      disabled={answerCorrect}
                       className={`laboratory-option ${
-                        selectedAnswer === String(index)
-                          ? "selected"
-                          : ""
+                        selectedAnswer === String(index) ? "selected" : ""
                       }`}
                       onClick={() => {
                         setSelectedAnswer(String(index));
@@ -193,43 +189,26 @@ export default function Laboratory({
                 </div>
 
                 {feedback && (
-                  <div className="laboratory-feedback">
+                  <div
+                    className={`laboratory-feedback ${
+                      answerCorrect ? "correct" : "incorrect"
+                    }`}
+                  >
                     {feedback}
                   </div>
                 )}
 
-                {!feedback.includes("CORRETO!") ? (
-                  <button
-                    className="start-button"
-                    onClick={verifyAnswer}
-                  >
+                {!answerCorrect ? (
+                  <button className="start-button" onClick={verifyAnswer}>
                     ANALISAR RESPOSTA
                   </button>
                 ) : (
-                  <button
-                    className="start-button"
-                    onClick={nextChallenge}
-                  >
-                    {challengeIndex === challenges.length - 1
-                      ? "FINALIZAR ANÁLISE"
-                      : "PRÓXIMO DESAFIO"}
+                  <button className="start-button" onClick={nextChallenge}>
+                    PRÓXIMO DESAFIO
                   </button>
                 )}
               </>
             )}
-          </div>
-
-          <img
-            className="scene-ada"
-            src={`${process.env.PUBLIC_URL}/personagens/ada.png`}
-            alt="Ada Lovelace"
-          />
-
-          <div className="scene-ada-speech">
-            <strong>Ada</strong>
-            <span>
-              Analise com cuidado. Nem todo resultado é uma evidência confiável!
-            </span>
           </div>
         </div>
       </section>

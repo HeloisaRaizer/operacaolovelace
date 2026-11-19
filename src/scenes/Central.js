@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 
 const challenges = [
@@ -19,8 +18,7 @@ const challenges = [
     message:
       "O terminal substituiu cada letra por sua posição no alfabeto. Qual palavra está escondida?",
     code: "3 - 9 - 5 - 14 - 20 - 9 - 19 - 20 - 1",
-    hint:
-      "A = 1, B = 2, C = 3... Cada número corresponde a uma letra.",
+    hint: "A = 1, B = 2, C = 3... Cada número corresponde a uma letra.",
     options: ["CIENTISTA", "TECNOLOGIA", "PESQUISADORA"],
     answer: 0,
     explanation:
@@ -48,7 +46,7 @@ const challenges = [
     options: ["SECRETO", "SISTEMA", "ARQUIVO"],
     answer: 0,
     explanation:
-      "Voltando três posições no alfabeto, V vira S, H vira E, F vira C, U vira R, H vira E, W vira T e R vira O. A mensagem é SECRETO!",
+      "Voltando três posições no alfabeto, encontramos a mensagem SECRETO.",
   },
 ];
 
@@ -75,16 +73,13 @@ function randomizeChallenges() {
     return {
       ...challenge,
       options: randomizedOptions,
-      answer: randomizedOptions.findIndex(
-        (option) => option.correct
-      ),
+      answer: randomizedOptions.findIndex((option) => option.correct),
     };
   });
 }
 
 export default function Central({ onExit, onComplete }) {
   const [challengeList] = useState(() => randomizeChallenges());
-
   const [stage, setStage] = useState(0);
   const [selected, setSelected] = useState("");
   const [feedback, setFeedback] = useState("");
@@ -103,15 +98,6 @@ export default function Central({ onExit, onComplete }) {
     if (Number(selected) === challenge.answer) {
       setStageCorrect(true);
       setFeedback(`CORRETO! ${challenge.explanation}`);
-
-      if (stage === challengeList.length - 1 && onComplete) {
-        onComplete({
-          id: "central-completed",
-          title: "Central de Decodificação concluída",
-          text:
-            "Os quatro códigos foram decifrados. A investigação criptográfica foi concluída.",
-        });
-      }
     } else {
       setStageCorrect(false);
       setFeedback(
@@ -125,6 +111,16 @@ export default function Central({ onExit, onComplete }) {
 
     if (stage === challengeList.length - 1) {
       setCompleted(true);
+
+      if (onComplete) {
+        onComplete({
+          id: "central-evidencia",
+          title: "Mensagem secreta decifrada",
+          text:
+            "Os quatro códigos foram decifrados. A central confirmou que a mensagem aponta para o Museu da Ciência.",
+        });
+      }
+
       return;
     }
 
@@ -156,36 +152,31 @@ export default function Central({ onExit, onComplete }) {
           }}
         >
           <div className="central-console">
-            <span className="eyebrow">
-              TERMINAL CRIPTOGRÁFICO
-            </span>
+            <span className="eyebrow">TERMINAL CRIPTOGRÁFICO</span>
 
             {completed ? (
-              <>
+              <div className="central-completion">
+                <div className="central-success-icon">✓</div>
+
                 <h2>DECODIFICAÇÃO CONCLUÍDA!</h2>
 
                 <p>
-                  Todos os quatro arquivos foram decifrados.
-                  Você utilizou diferentes técnicas criptográficas
-                  para recuperar as mensagens.
+                  Todos os quatro arquivos foram decifrados. Você utilizou
+                  diferentes técnicas criptográficas para recuperar as mensagens.
                 </p>
 
                 <div className="central-success">
-                  ✓ DESAFIO DE DECODIFICAÇÃO CONCLUÍDO
+                  DESAFIO DE DECODIFICAÇÃO CONCLUÍDO
                 </div>
 
                 <p>
-                  As informações recuperadas podem ajudar
-                  a solucionar o caso.
+                  As informações recuperadas podem ajudar a solucionar o caso.
                 </p>
 
-                <button
-                  className="start-button"
-                  onClick={onExit}
-                >
+                <button className="start-button" onClick={onExit}>
                   VOLTAR À INVESTIGAÇÃO
                 </button>
-              </>
+              </div>
             ) : (
               <>
                 <h2>{challenge.title}</h2>
@@ -198,34 +189,24 @@ export default function Central({ onExit, onComplete }) {
                   <div
                     className="progress-fill"
                     style={{
-                      width: `${
-                        ((stage + 1) / challengeList.length) * 100
-                      }%`,
+                      width: `${((stage + 1) / challengeList.length) * 100}%`,
                     }}
                   />
                 </div>
 
                 <p>{challenge.message}</p>
 
-                <div className="central-code">
-                  {challenge.code}
-                </div>
+                <div className="central-code">{challenge.code}</div>
 
                 <button
-                  className="close-button"
-                  onClick={() =>
-                    setShowHint((previous) => !previous)
-                  }
+                  className="close-button central-hint-button"
+                  onClick={() => setShowHint((previous) => !previous)}
                 >
-                  {showHint
-                    ? "ESCONDER DICA"
-                    : "PRECISO DE UMA DICA"}
+                  {showHint ? "ESCONDER DICA" : "PRECISO DE UMA DICA"}
                 </button>
 
                 {showHint && (
-                  <div className="central-hint">
-                    {challenge.hint}
-                  </div>
+                  <div className="central-hint">{challenge.hint}</div>
                 )}
 
                 <div className="central-options">
@@ -234,42 +215,35 @@ export default function Central({ onExit, onComplete }) {
                       key={option.text}
                       disabled={stageCorrect}
                       className={`central-option ${
-                        selected === String(index)
-                          ? "selected"
-                          : ""
+                        selected === String(index) ? "selected" : ""
                       }`}
                       onClick={() => {
                         setSelected(String(index));
                         setFeedback("");
                       }}
                     >
-                      <span>
-                        {String.fromCharCode(65 + index)}
-                      </span>
-
+                      <span>{String.fromCharCode(65 + index)}</span>
                       {option.text}
                     </button>
                   ))}
                 </div>
 
                 {feedback && (
-                  <div className="central-feedback">
+                  <div
+                    className={`central-feedback ${
+                      stageCorrect ? "correct" : "incorrect"
+                    }`}
+                  >
                     {feedback}
                   </div>
                 )}
 
                 {!stageCorrect ? (
-                  <button
-                    className="start-button"
-                    onClick={verifyAnswer}
-                  >
+                  <button className="start-button" onClick={verifyAnswer}>
                     DECIFRAR CÓDIGO
                   </button>
                 ) : (
-                  <button
-                    className="start-button"
-                    onClick={nextStage}
-                  >
+                  <button className="start-button" onClick={nextStage}>
                     {stage === challengeList.length - 1
                       ? "FINALIZAR DESAFIO"
                       : "PRÓXIMO CÓDIGO"}

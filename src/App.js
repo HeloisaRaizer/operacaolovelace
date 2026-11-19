@@ -1,4 +1,3 @@
-
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Library from "./scenes/Library";
 import Museum from "./scenes/Museum";
@@ -9,12 +8,10 @@ import "./App.css";
 
 const shuffle = (items) => {
   const array = [...items];
-
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
   }
-
   return array;
 };
 
@@ -64,8 +61,6 @@ export default function App() {
   const [feedback, setFeedback] = useState("");
   const [introOpen, setIntroOpen] = useState(false);
 
-  const museumDone = completedPlaces.includes("museum");
-
   const allClues = useMemo(
     () =>
       currentResearcher
@@ -82,12 +77,31 @@ export default function App() {
               title: "Mensagem secreta decifrada",
               text: "A central confirmou que a mensagem aponta para o Museu da Ciência. A sequência de códigos foi decifrada com sucesso.",
             },
+            {
+              id: `${currentResearcher.id}-museum-evidence`,
+              title: `Registro científico: ${currentResearcher.name}`,
+              text: `A missão do Museu confirmou informações relacionadas a ${currentResearcher.area}. ${currentResearcher.explanation}`,
+              scene: "museum",
+            },
           ]
         : [],
     [currentResearcher]
   );
 
   const foundIds = useMemo(() => clues.map((c) => c.id), [clues]);
+
+  const museumDone = completedPlaces.includes("museum");
+
+  const requiredPlaces = ["library", "museum", "laboratory", "central"];
+
+  const requiredPlacesDone = requiredPlaces.every((place) =>
+    completedPlaces.includes(place)
+  );
+
+  const caseReady =
+    allClues.every((requiredClue) =>
+      clues.some((foundClue) => foundClue.id === requiredClue.id)
+    ) && requiredPlacesDone;
 
   const libraryDone =
     (currentResearcher?.libraryClues || []).length > 0 &&
@@ -150,7 +164,6 @@ export default function App() {
 
   const startFirstCase = () => {
     const deck = shuffle(researchers);
-
     if (!deck.length) return;
 
     setResearcherDeck(deck.slice(1));
@@ -188,11 +201,13 @@ export default function App() {
     );
   }, []);
 
-  const markPlaceComplete = useCallback((id) => {
-    setCompletedPlaces((prev) =>
-      prev.includes(id) ? prev : [...prev, id]
-    );
-  }, []);
+  const markPlaceComplete = useCallback(
+    (id) =>
+      setCompletedPlaces((prev) =>
+        prev.includes(id) ? prev : [...prev, id]
+      ),
+    []
+  );
 
   const movePlayer = useCallback((key) => {
     const dirs = {
@@ -263,7 +278,12 @@ export default function App() {
   );
 
   const interact = useCallback(() => {
-    if (!currentResearcher || introOpen || journalOpen || selectedClue) {
+    if (
+      !currentResearcher ||
+      introOpen ||
+      journalOpen ||
+      selectedClue
+    ) {
       return;
     }
 
@@ -324,7 +344,6 @@ export default function App() {
     };
 
     window.addEventListener("keydown", keyDown);
-
     return () => window.removeEventListener("keydown", keyDown);
   }, [
     screen,
@@ -341,14 +360,14 @@ export default function App() {
       return;
     }
 
-    if (Number(selectedAnswer) === currentResearcher.answer) {
-      if (!museumDone) {
-        setFeedback(
-          "Hipótese correta! Antes de concluir o caso, complete a fase bônus no Museu da Ciência."
-        );
-        return;
-      }
+    if (!caseReady) {
+      setFeedback(
+        "Ainda faltam etapas da investigação. Conclua todos os locais e reúna as evidências antes de confirmar"
+      );
+      return;
+    }
 
+    if (Number(selectedAnswer) === currentResearcher.answer) {
       setFeedback("Acertou! As evidências confirmam sua hipótese.");
       setScreen("result");
     } else {
@@ -362,20 +381,13 @@ export default function App() {
     return (
       <main className="home-screen">
         <div className="home-content">
-          <span className="eyebrow">
-            STEAMULANDO • JOGO DE INVESTIGAÇÃO
-          </span>
-
           <h1>
             OPERAÇÃO
             <br />
             LOVELACE
           </h1>
 
-          <p>
-            Uma investigação pela cidade. Pistas escondidas. Uma mente
-            brilhante para encontrar.
-          </p>
+          <p>A imaginação transforma ideias em descobertas.</p>
 
           <img
             className="home-ada"
@@ -398,6 +410,7 @@ export default function App() {
       <main className="result-screen">
         <section className="result-card game-complete-card">
           <span className="eyebrow">OPERAÇÃO LOVELACE</span>
+
           <div className="completion-star">★</div>
 
           <h1>Você concluiu a investigação!</h1>
@@ -416,10 +429,7 @@ export default function App() {
             JOGAR NOVAMENTE
           </button>
 
-          <button
-            className="close-button"
-            onClick={() => setScreen("home")}
-          >
+          <button className="close-button" onClick={() => setScreen("home")}>
             VOLTAR AO INÍCIO
           </button>
         </section>
@@ -428,11 +438,7 @@ export default function App() {
   }
 
   if (!currentResearcher) {
-    return (
-      <div className="loading-screen">
-        Preparando investigação...
-      </div>
-    );
+    return <div className="loading-screen">Preparando investigação...</div>;
   }
 
   return (
@@ -463,7 +469,65 @@ export default function App() {
                 backgroundImage: `url("${process.env.PUBLIC_URL}/cenarios/cidade.png")`,
               }}
             >
-              <div className="scene-label">
+              {/* CAMPANHA — POSICIONADA NO TOPO DIREITO */}
+              <div
+                className="campaign-progress-panel"
+                style={{
+                  position: "absolute",
+                  top: "14px",
+                  right: "14px",
+                  left: "auto",
+                  width: "270px",
+                  maxWidth: "32%",
+                  zIndex: 20,
+                }}
+              >
+                <div className="campaign-progress-heading">
+                  <span>CAMPANHA</span>
+                  <strong>
+                    CASO {String(caseNumber).padStart(2, "0")} /{" "}
+                    {researchers.length}
+                  </strong>
+                </div>
+
+                <div
+                  className="campaign-progress-track"
+                  aria-label={`Caso ${caseNumber} de ${researchers.length}`}
+                >
+                  {researchers.map((researcher, index) => (
+                    <span
+                      key={researcher.id || researcher.name || index}
+                      className={`campaign-progress-segment ${
+                        index < caseNumber - 1 ? "complete" : ""
+                      } ${index === caseNumber - 1 ? "current" : ""}`}
+                      title={`Caso ${index + 1}`}
+                    />
+                  ))}
+                </div>
+
+                <small>
+                  {caseNumber === 1
+                    ? "Primeiro caso da operação"
+                    : `${caseNumber - 1} caso(s) concluído(s)`}
+                  {" · "}
+                  {researchers.length - caseNumber} restante(s) após este
+                </small>
+              </div>
+
+              {/* OBJETIVO — POSICIONADO NO CANTO INFERIOR ESQUERDO */}
+              <div
+                className="scene-label"
+                style={{
+                  position: "absolute",
+                  top: "auto",
+                  left: "14px",
+                  bottom: "14px",
+                  right: "auto",
+                  width: "270px",
+                  maxWidth: "32%",
+                  zIndex: 20,
+                }}
+              >
                 <span>LOCAL: CENTRO DA CIDADE</span>
                 <strong>
                   Investigue os locais marcados para encontrar evidências
@@ -525,19 +589,7 @@ export default function App() {
                 );
               })}
 
-              <div
-                className="player-marker"
-                style={{
-                  left: `${player.x}%`,
-                  top: `${player.y}%`,
-                }}
-              >
-                <img
-                  src={`${process.env.PUBLIC_URL}/personagens/ada.png`}
-                  alt="Ada caminhando"
-                />
-                <small>ADA</small>
-              </div>
+              {/* ADA REMOVIDA DO MAPA */}
             </div>
           </section>
 
@@ -562,12 +614,11 @@ export default function App() {
           clues={clues}
           onClue={addClue}
           onExit={() => {
-            const done = (currentResearcher.libraryClues || []).every((c) =>
+            const done = (currentResearcher.libraryClues || []).every((c =>
               clues.some((item) => item.id === c.id)
-            );
+            ));
 
             if (done) markPlaceComplete("library");
-
             setScreen("city");
           }}
           onOpenJournal={() => setJournalOpen(true)}
@@ -578,7 +629,13 @@ export default function App() {
         <Museum
           researcher={currentResearcher}
           onExit={() => setScreen("city")}
-          onComplete={() => markPlaceComplete("museum")}
+          onComplete={() => {
+            const museumEvidence = allClues.find(
+              (clue) => clue.scene === "museum"
+            );
+            if (museumEvidence) addClue(museumEvidence);
+            markPlaceComplete("museum");
+          }}
         />
       )}
 
@@ -636,9 +693,7 @@ export default function App() {
               ))}
             </div>
 
-            {feedback && (
-              <p className="feedback-message">{feedback}</p>
-            )}
+            {feedback && <p className="feedback-message">{feedback}</p>}
 
             <div className="modal-actions">
               <button className="start-button" onClick={handleAnswer}>
@@ -687,16 +742,14 @@ export default function App() {
                 : "FINALIZAR OPERAÇÃO"}
             </button>
 
-            <button
-              className="close-button"
-              onClick={() => setScreen("home")}
-            >
+            <button className="close-button" onClick={() => setScreen("home")}>
               VOLTAR AO INÍCIO
             </button>
           </div>
         </main>
       )}
 
+      {/* MODAL DE PISTA */}
       {selectedClue && (
         <div className="modal-overlay">
           <div className="dialogue-modal">
@@ -734,9 +787,10 @@ export default function App() {
         </div>
       )}
 
+      {/* CADERNO DE INVESTIGAÇÃO — NOVO LAYOUT */}
       {journalOpen && (
-        <div className="modal-overlay">
-          <div className="journal-modal">
+        <div className="modal-overlay journal-overlay">
+          <div className="journal-modal journal-redesign">
             <button
               className="modal-close"
               onClick={() => setJournalOpen(false)}
@@ -745,76 +799,248 @@ export default function App() {
               ×
             </button>
 
-            <span className="eyebrow">OPERAÇÃO LOVELACE</span>
-            <h2>Caderno de investigação</h2>
+            <header className="journal-header-new">
+              <span className="eyebrow">
+                OPERAÇÃO LOVELACE · ARQUIVO CONFIDENCIAL
+              </span>
 
-            <p className="journal-progress">
-              Evidências encontradas:{" "}
-              <strong>
-                {clues.length}/{allClues.length}
-              </strong>
-            </p>
+              <h2>Caderno de investigação</h2>
 
-            <div className="progress-track">
-              <div
-                className="progress-fill"
-                style={{
-                  width: `${
-                    allClues.length
-                      ? (clues.length / allClues.length) * 100
-                      : 0
-                  }%`,
-                }}
-              />
-            </div>
-
-            {clues.length === 0 && (
-              <p className="empty-journal">
-                Ainda não há evidências. Explore a cidade e seus locais.
+              <p>
+                CASO {String(caseNumber).padStart(3, "0")} ·{" "}
+                {currentResearcher.name}
               </p>
-            )}
+            </header>
 
-            <div className="journal-list">
-              {clues.map((clue) => (
-                <article className="journal-clue" key={clue.id}>
-                  <span>EVIDÊNCIA REGISTRADA</span>
-                  <h3>{clue.title}</h3>
-                  <p>{clue.text}</p>
-                </article>
-              ))}
-            </div>
+            {/* PROGRESSO GERAL */}
+            <section className="journal-overview">
+              <div className="journal-count">
+                <strong>{clues.length}</strong>
+                <span>de {allClues.length} evidências encontradas</span>
+              </div>
 
-            {clues.length === allClues.length ? (
-              <>
-                <p className="journal-reminder">
-                  {museumDone
-                    ? "Fase bônus concluída! Você já pode resolver o caso."
-                    : "As sete evidências foram encontradas. Visite o Museu da Ciência para liberar a etapa final."}
-                </p>
-
-                <button
-                  className="start-button"
-                  disabled={!museumDone}
-                  onClick={() => {
-                    setJournalOpen(false);
-                    setSelectedAnswer("");
-                    setFeedback("");
-                    setScreen("deduction");
+              <div className="journal-progress-track">
+                <div
+                  className="journal-progress-fill"
+                  style={{
+                    width: `${
+                      allClues.length
+                        ? (clues.length / allClues.length) * 100
+                        : 0
+                    }%`,
                   }}
-                >
-                  ANALISAR E RESOLVER O CASO
-                </button>
-              </>
-            ) : (
-              <p className="journal-reminder">
-                Encontre mais {allClues.length - clues.length} evidência(s)
-                para liberar a análise final.
-              </p>
-            )}
+                />
+              </div>
+            </section>
+
+            {/* STATUS DAS ETAPAS */}
+            <section className="journal-stages-new">
+              <h3>Progresso das etapas</h3>
+
+              <div className="journal-stage-grid">
+                {requiredPlaces.map((place) => {
+                  const done = completedPlaces.includes(place);
+
+                  const names = {
+                    library: "Biblioteca",
+                    museum: "Museu",
+                    laboratory: "Laboratório",
+                    central: "Central de códigos",
+                  };
+
+                  return (
+                    <div
+                      key={place}
+                      className={`journal-stage-card ${
+                        done ? "stage-done" : "stage-pending"
+                      }`}
+                    >
+                      <span className="stage-icon">{done ? "✓" : "○"}</span>
+                      <span>{names[place]}</span>
+                      <small>{done ? "CONCLUÍDO" : "PENDENTE"}</small>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* PISTAS DA CIDADE */}
+            <section className="journal-section-new">
+              <div className="journal-section-heading">
+                <div>
+                  <span className="journal-section-kicker">01 · EXPLORAÇÃO</span>
+                  <h3>Pistas da cidade</h3>
+                </div>
+
+                <span className="journal-section-count">
+                  {(currentResearcher.cityClues || []).filter((c) =>
+                    clues.some((f) => f.id === c.id)
+                  ).length}
+                  /{(currentResearcher.cityClues || []).length}
+                </span>
+              </div>
+
+              <div className="journal-evidence-grid">
+                {(currentResearcher.cityClues || []).map((clue) => {
+                  const collected = clues.some((f) => f.id === clue.id);
+
+                  return (
+                    <article
+                      key={clue.id}
+                      className={`journal-evidence-card ${
+                        collected ? "evidence-found" : "evidence-missing"
+                      }`}
+                    >
+                      <span className="evidence-status">
+                        {collected
+                          ? "✓ EVIDÊNCIA RECUPERADA"
+                          : "⌕ AINDA NÃO ENCONTRADA"}
+                      </span>
+
+                      <h4>{clue.title}</h4>
+
+                      <p>
+                        {collected
+                          ? clue.text
+                          : "Investigue o centro da cidade para recuperar este registro."}
+                      </p>
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* BIBLIOTECA */}
+            <section className="journal-section-new">
+              <div className="journal-section-heading">
+                <div>
+                  <span className="journal-section-kicker">02 · DOCUMENTOS</span>
+                  <h3>Biblioteca</h3>
+                </div>
+
+                <span className="journal-section-count">
+                  {(currentResearcher.libraryClues || []).filter((c) =>
+                    clues.some((f) => f.id === c.id)
+                  ).length}
+                  /{(currentResearcher.libraryClues || []).length}
+                </span>
+              </div>
+
+              <div className="journal-evidence-grid">
+                {(currentResearcher.libraryClues || []).map((clue) => {
+                  const collected = clues.some((f) => f.id === clue.id);
+
+                  return (
+                    <article
+                      key={clue.id}
+                      className={`journal-evidence-card ${
+                        collected ? "evidence-found" : "evidence-missing"
+                      }`}
+                    >
+                      <span className="evidence-status">
+                        {collected
+                          ? "✓ DOCUMENTO RECUPERADO"
+                          : "⌕ DOCUMENTO PENDENTE"}
+                      </span>
+
+                      <h4>{clue.title}</h4>
+
+                      <p>
+                        {collected
+                          ? clue.text
+                          : "Este documento ainda não foi localizado. Explore a biblioteca."}
+                      </p>
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* OUTRAS EVIDÊNCIAS */}
+            <section className="journal-section-new">
+              <div className="journal-section-heading">
+                <div>
+                  <span className="journal-section-kicker">03 · ANÁLISE</span>
+                  <h3>Outras evidências</h3>
+                </div>
+              </div>
+
+              <div className="journal-evidence-grid">
+                {allClues
+                  .filter((clue) => {
+                    const cityIds = (currentResearcher.cityClues || []).map(
+                      (c) => c.id
+                    );
+                    const libraryIds = (
+                      currentResearcher.libraryClues || []
+                    ).map((c) => c.id);
+
+                    return (
+                      !cityIds.includes(clue.id) &&
+                      !libraryIds.includes(clue.id)
+                    );
+                  })
+                  .map((clue) => {
+                    const collected = clues.some((f) => f.id === clue.id);
+
+                    return (
+                      <article
+                        key={clue.id}
+                        className={`journal-evidence-card ${
+                          collected ? "evidence-found" : "evidence-missing"
+                        }`}
+                      >
+                        <span className="evidence-status">
+                          {collected ? "✓ REGISTRADA" : "○ AGUARDANDO"}
+                        </span>
+
+                        <h4>{clue.title}</h4>
+
+                        <p>
+                          {collected
+                            ? clue.text
+                            : "Conclua a etapa correspondente para desbloquear esta evidência."}
+                        </p>
+                      </article>
+                    );
+                  })}
+              </div>
+            </section>
+
+            {/* RODAPÉ */}
+            <footer className="journal-footer-new">
+              {caseReady ? (
+                <>
+                  <div className="journal-ready-message">
+                    <span>✓</span>
+                    <strong>Todas as etapas foram concluídas!</strong>
+                    <p>As evidências estão prontas para a análise final.</p>
+                  </div>
+
+                  <button
+                    className="start-button journal-final-button"
+                    onClick={() => {
+                      setJournalOpen(false);
+                      setSelectedAnswer("");
+                      setFeedback("");
+                      setScreen("deduction");
+                    }}
+                  >
+                    ANALISAR E RESOLVER O CASO
+                  </button>
+                </>
+              ) : (
+                <p className="journal-reminder">
+                  Continue investigando. Reúna todas as evidências e conclua
+                  as quatro etapas para liberar a análise final.
+                </p>
+              )}
+            </footer>
           </div>
         </div>
       )}
 
+      {/* INTRODUÇÃO DO CASO */}
       {introOpen && screen === "city" && (
         <div className="modal-overlay intro-overlay">
           <section className="intro-card">
@@ -825,8 +1051,7 @@ export default function App() {
 
             <div>
               <span className="eyebrow">
-                MISSÃO INICIADA · CASO{" "}
-                {String(caseNumber).padStart(3, "0")}
+                MISSÃO INICIADA · CASO {String(caseNumber).padStart(3, "0")}
               </span>
 
               <h2>Temos um mistério para resolver!</h2>
@@ -845,9 +1070,8 @@ export default function App() {
               </div>
 
               <p className="intro-controls">
-                Use <strong>WASD</strong> ou as <strong>setas</strong> para
-                movimentar Ada. Pressione <strong>E</strong> perto de um local
-                para investigar.
+                Clique nos locais marcados no mapa para explorar e encontrar as
+                evidências.
               </p>
 
               <button
