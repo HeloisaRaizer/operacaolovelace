@@ -229,4 +229,6 @@ Mas atenção... uma nova pista acaba de chegar. Nossa investigação está apen
   ]
 };
 
-export default [ninaDaHora];
+const researchers = [ninaDaHora];
+
+export default researchers;
