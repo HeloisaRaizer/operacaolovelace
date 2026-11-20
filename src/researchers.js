@@ -474,12 +474,252 @@ Mais uma história recuperada! Mas ainda existem cientistas esperando para serem
 
 
 // ==========================================
+// DOSSIÊ 003 — SANDRA AVILA
+// ==========================================
+
+const sandraAvila = {
+  id: "sandra-avila",
+  name: "Sandra Avila",
+  institution: "Universidade Estadual de Campinas (Unicamp)",
+  area: "Inteligência Artificial e Visão Computacional",
+
+  description:
+    "Pesquisadora brasileira que desenvolve pesquisas em Inteligência Artificial e Visão Computacional, incluindo aplicações para análise de lesões de pele.",
+
+  intro: `Detetive, temos um novo mistério!
+
+Descobri registros de uma cientista brasileira que trabalha com tecnologias capazes de permitir que computadores enxerguem e interpretem imagens.
+
+Mas suas pesquisas vão muito além disso!
+
+Ela busca desenvolver tecnologias de inteligência artificial capazes de considerar a diversidade das pessoas, especialmente na análise de lesões de pele.
+
+Espalhei oito pistas pela cidade. Explore os locais, resolva os enigmas e descubra quem é essa pesquisadora!
+
+Preparada para começar o Dossiê 003?`,
+
+  finalMessage: `Mistério solucionado, detetive!
+
+Você descobriu Sandra Avila, uma cientista brasileira que utiliza Inteligência Artificial para enfrentar desafios importantes da sociedade.
+
+Seu projeto "Peles Negras Importam" busca desenvolver tecnologias capazes de auxiliar na identificação de lesões de pele, considerando a diversidade das pessoas.
+
+Sua pesquisa nos ensina uma lição importante: uma tecnologia só pode beneficiar a todos quando considera a diversidade de quem a utiliza.
+
+Mais uma cientista encontrada! Mas nosso arquivo ainda guarda novos mistérios...`,
+
+  challenges: [
+    // DESAFIO 1 — BIBLIOTECA
+    {
+      id: 1,
+      location: "library",
+      type: "quiz",
+      title: "A máquina que enxerga",
+
+      ada: "Encontrei registros de uma tecnologia que permite aos computadores analisar e interpretar imagens. Qual é o nome dessa área da Inteligência Artificial?",
+
+      question:
+        "Qual área da Inteligência Artificial permite aos computadores analisar e interpretar imagens?",
+
+      options: [
+        "Processamento de Linguagem Natural",
+        "Visão Computacional",
+        "Segurança de Redes"
+      ],
+
+      answer: 1,
+
+      clue:
+        "Nossa cientista pesquisa tecnologias que permitem analisar imagens com computadores.",
+
+      success:
+        "Correto! Visão Computacional é a área que permite aos computadores analisar e interpretar imagens."
+    },
+
+    // DESAFIO 2 — BIBLIOTECA
+    {
+      id: 2,
+      location: "library",
+      type: "caesar",
+      title: "O código visual",
+
+      ada: "Uma palavra importante foi criptografada. Cada letra avançou uma posição no alfabeto. Volte uma letra para descobrir o termo!",
+
+      question:
+        "Volte uma letra no alfabeto para descobrir a palavra. Exemplo: B = A, C = B.",
+
+      cipher: "W J T B P",
+
+      answer: "VISÃO",
+
+      clue:
+        "A visão computacional é uma das principais áreas de pesquisa da cientista.",
+
+      success:
+        "Muito bem! VISÃO! A visão computacional é fundamental para que sistemas de inteligência artificial interpretem imagens."
+    },
+
+    // DESAFIO 3 — MUSEU
+    {
+      id: 3,
+      location: "museum",
+      type: "quiz",
+      title: "O problema das imagens",
+
+      ada: "Um sistema de IA foi treinado principalmente com imagens de lesões em peles claras. O que pode acontecer quando ele analisa lesões em peles escuras?",
+
+      question:
+        "O que pode acontecer quando um sistema é treinado com imagens pouco representativas?",
+
+      options: [
+        "Ele poderá apresentar mais erros devido à falta de diversidade nos dados.",
+        "Ele identificará todas as lesões com a mesma precisão, independentemente dos dados.",
+        "Ele deixará de precisar de avaliação por profissionais da saúde."
+      ],
+
+      answer: 0,
+
+      clue:
+        "A falta de representatividade nos dados pode comprometer a qualidade dos resultados.",
+
+      success:
+        "Correto! A falta de diversidade nos dados pode fazer com que sistemas de IA apresentem mais erros ao analisar determinados grupos."
+    },
+
+    // DESAFIO 4 — MUSEU
+    {
+      id: 4,
+      location: "museum",
+      type: "code",
+      title: "A palavra escondida",
+
+      ada: "Encontrei uma mensagem sobre a área da saúde investigada pela cientista. Use a posição das letras no alfabeto para decifrar!",
+
+      question:
+        "Use A=1, B=2, C=3 ... Z=26 para decifrar a mensagem:",
+
+      cipher: "16 - 5 - 12 - 5",
+
+      answer: "PELE",
+
+      clue:
+        "Nossa cientista desenvolve pesquisas sobre inteligência artificial aplicada à análise de lesões de pele.",
+
+      success:
+        "Mensagem decifrada: PELE! A pesquisadora desenvolve estudos que relacionam inteligência artificial e análise dermatológica."
+    },
+
+    // DESAFIO 5 — LABORATÓRIO
+    {
+      id: 5,
+      location: "laboratory",
+      type: "quiz",
+      title: "Uma tecnologia para todos",
+
+      ada: "A cientista participa do projeto 'Peles Negras Importam'. Qual é um dos principais objetivos dessa pesquisa?",
+
+      question:
+        "Qual é um dos principais objetivos do projeto?",
+
+      options: [
+        "Criar filtros digitais que alterem imagens de pele.",
+        "Substituir completamente os dermatologistas por computadores.",
+        "Desenvolver modelos de IA que considerem a diversidade dos tons de pele e auxiliem na identificação de lesões."
+      ],
+
+      answer: 2,
+
+      clue:
+        "O projeto busca reduzir desigualdades em ferramentas de análise dermatológica.",
+
+      success:
+        "Isso mesmo! O objetivo é desenvolver tecnologias que considerem diferentes tons de pele e possam auxiliar na identificação de lesões."
+    },
+
+    // DESAFIO 6 — LABORATÓRIO
+    {
+      id: 6,
+      location: "laboratory",
+      type: "scramble",
+      title: "Letras fora de ordem",
+
+      ada: "Uma palavra relacionada ao impacto das pesquisas foi embaralhada. Organize as letras e descubra em qual área essas tecnologias podem ajudar!",
+
+      question:
+        "Reorganize as cinco letras para descobrir a palavra.",
+
+      cipher: "D E A S Ú",
+
+      answer: "SAÚDE",
+
+      clue:
+        "A cientista utiliza inteligência artificial para contribuir com pesquisas na área da saúde.",
+
+      success:
+        "Correto! SAÚDE! As pesquisas em inteligência artificial podem contribuir para o desenvolvimento de tecnologias aplicadas à saúde."
+    },
+
+    // DESAFIO 7 — CENTRAL
+    {
+      id: 7,
+      location: "central",
+      type: "caesar",
+      title: "Identidade criptografada",
+
+      ada: "Estamos muito perto de solucionar o caso! Encontrei o primeiro nome da pesquisadora, mas ele foi protegido por um código. Cada letra avançou uma posição no alfabeto.",
+
+      question:
+        "Volte uma posição no alfabeto para descobrir o primeiro nome.",
+
+      cipher: "T B O E S B",
+
+      answer: "SANDRA",
+
+      clue:
+        "Descobrimos o primeiro nome da pesquisadora. Falta confirmar sua identidade!",
+
+      success:
+        "Código decifrado: SANDRA! Agora precisamos confirmar sua identidade completa."
+    },
+
+    // DESAFIO 8 — CENTRAL
+    {
+      id: 8,
+      location: "central",
+      type: "quiz",
+      title: "Identidade revelada",
+
+      ada: "Encontramos a última evidência! Nossa cientista é professora da Unicamp e desenvolve pesquisas em inteligência artificial e visão computacional, incluindo um projeto sobre análise de lesões em peles negras. Quem é ela?",
+
+      question:
+        "Quem é a pesquisadora?",
+
+      options: [
+        "Sonia Guimarães",
+        "Sandra Avila",
+        "Nina da Hora"
+      ],
+
+      answer: 1,
+
+      clue:
+        "Identidade confirmada: Sandra Avila!",
+
+      success:
+        "Identidade confirmada: Sandra Avila! Caso solucionado, detetive!"
+    }
+  ]
+};
+
+
+// ==========================================
 // EXPORTAÇÃO DOS DOSSIÊS
 // ==========================================
 
 const researchers = [
   ninaDaHora,
-  teresaLudermir
+  teresaLudermir,
+  sandraAvila
 ];
 
 export default researchers;
