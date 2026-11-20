@@ -3433,3 +3433,773 @@ button:disabled {
   padding: 12px !important;
   margin-top: 8px !important;
 }
+/* ==========================================
+   OPERAÇÃO LOVELACE — VISUAL DAS PERGUNTAS
+   ========================================== */
+
+.lab-question-layout {
+  box-sizing: border-box !important;
+  width: min(680px, 95vw) !important;
+  max-width: 680px !important;
+  margin: 0 auto !important;
+  padding: 28px !important;
+  overflow: visible !important;
+}
+
+/* Cabeçalho */
+
+.lab-question-layout .laboratory-header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 20px !important;
+  margin-bottom: 24px !important;
+}
+
+.lab-question-layout .laboratory-header h2 {
+  font-size: clamp(22px, 3vw, 30px) !important;
+  line-height: 1.3 !important;
+  margin-top: 8px !important;
+}
+
+/* Informações do caso */
+
+.lab-case-card {
+  padding: 18px 20px !important;
+  margin-bottom: 22px !important;
+  background: rgba(232, 194, 116, 0.06) !important;
+  border: 1px solid rgba(232, 194, 116, 0.2) !important;
+  border-radius: 14px !important;
+}
+
+.lab-case-number {
+  display: inline-block !important;
+  font-size: 11px !important;
+  letter-spacing: 2px !important;
+  color: #e8c274 !important;
+  font-weight: 800 !important;
+  margin-bottom: 10px !important;
+}
+
+.lab-case-card h3 {
+  font-size: 20px !important;
+  margin: 5px 0 8px !important;
+  line-height: 1.4 !important;
+}
+
+.lab-case-card p {
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  margin: 0 !important;
+  opacity: 0.8 !important;
+}
+
+/* Barra de progresso */
+
+.lab-progress-card {
+  margin: 18px 0 24px !important;
+}
+
+.lab-progress-card .laboratory-progress-label {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  letter-spacing: 1.3px !important;
+  margin-bottom: 10px !important;
+}
+
+.lab-progress-card .laboratory-progress-track {
+  width: 100% !important;
+  height: 9px !important;
+  border-radius: 99px !important;
+  overflow: hidden !important;
+  background: #30203b !important;
+}
+
+.lab-progress-card .laboratory-progress-fill {
+  height: 100% !important;
+  border-radius: 99px !important;
+  background: linear-gradient(90deg, #a77ad2, #e8c274) !important;
+  transition: width 0.35s ease !important;
+}
+
+/* Cartão da pergunta */
+
+.lab-question-card {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  padding: 24px !important;
+  margin: 0 !important;
+  border-radius: 18px !important;
+  background: linear-gradient(
+    145deg,
+    rgba(43, 26, 55, 0.98),
+    rgba(25, 13, 35, 0.98)
+  ) !important;
+  border: 1px solid rgba(183, 140, 210, 0.3) !important;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* Título da questão */
+
+.lab-question-heading {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  margin-bottom: 22px !important;
+}
+
+.lab-question-icon {
+  display: flex !important;
+  flex-shrink: 0 !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 12px !important;
+  background: rgba(232, 194, 116, 0.13) !important;
+  border: 1px solid rgba(232, 194, 116, 0.4) !important;
+  color: #e8c274 !important;
+  font-size: 22px !important;
+  font-weight: 900 !important;
+}
+
+.lab-question-heading small {
+  display: block !important;
+  color: #d5a65e !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 1.6px !important;
+  margin-bottom: 5px !important;
+}
+
+.lab-question-heading h3 {
+  margin: 0 !important;
+  font-size: 21px !important;
+  line-height: 1.4 !important;
+  color: #f4eaff !important;
+}
+
+/* Enunciado */
+
+.lab-question-text {
+  display: block !important;
+  width: 100% !important;
+  font-size: 16px !important;
+  line-height: 1.85 !important;
+  font-weight: 500 !important;
+  color: #e5dbea !important;
+  margin: 0 0 24px !important;
+  overflow-wrap: anywhere !important;
+}
+
+/* Alternativas */
+
+.lab-answer-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.lab-answer-option {
+  display: flex !important;
+  position: relative !important;
+  align-items: center !important;
+  gap: 16px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 66px !important;
+  height: auto !important;
+  padding: 15px 18px !important;
+  margin: 0 !important;
+  border-radius: 13px !important;
+  border: 1px solid #59416b !important;
+  background: #2c1d3a !important;
+  color: #eee3f5 !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  box-sizing: border-box !important;
+  overflow: visible !important;
+}
+
+.lab-answer-option:hover:not(:disabled) {
+  transform: translateY(-2px) !important;
+  border-color: #c49add !important;
+  background: #39264c !important;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* Letra A/B/C */
+
+.lab-answer-letter {
+  display: flex !important;
+  flex: 0 0 36px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 36px !important;
+  min-width: 36px !important;
+  max-width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 10px !important;
+  border: 1px solid #a783c3 !important;
+  background: #3b2850 !important;
+  color: #e8c274 !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+  box-sizing: border-box !important;
+}
+
+/* Texto da alternativa */
+
+.lab-answer-text {
+  display: block !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  line-height: 1.65 !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  text-align: left !important;
+  color: inherit !important;
+  background: transparent !important;
+}
+
+/* Alternativa selecionada */
+
+.lab-answer-option.selected {
+  border: 2px solid #e8c274 !important;
+  background: rgba(232, 194, 116, 0.12) !important;
+}
+
+.lab-answer-option.selected .lab-answer-letter {
+  background: #e8c274 !important;
+  color: #24142d !important;
+  border-color: #e8c274 !important;
+}
+
+.lab-selected-mark {
+  color: #e8c274 !important;
+  font-size: 12px !important;
+  margin-left: auto !important;
+}
+
+/* Resposta correta */
+
+.lab-answer-option.correct {
+  border: 2px solid #68c99a !important;
+  background: rgba(57, 151, 101, 0.16) !important;
+}
+
+.lab-answer-option.correct .lab-answer-letter {
+  background: #68c99a !important;
+  color: #102a1c !important;
+  border-color: #68c99a !important;
+}
+
+/* Resposta errada */
+
+.lab-answer-option.wrong {
+  border: 2px solid #e27c82 !important;
+  background: rgba(181, 61, 72, 0.15) !important;
+}
+
+.lab-answer-option.wrong .lab-answer-letter {
+  background: #e27c82 !important;
+  color: #351218 !important;
+  border-color: #e27c82 !important;
+}
+
+.lab-result-mark {
+  flex-shrink: 0 !important;
+  margin-left: auto !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+}
+
+/* Feedback */
+
+.lab-feedback-box {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  margin-top: 20px !important;
+  padding: 18px !important;
+  border-radius: 13px !important;
+  line-height: 1.7 !important;
+}
+
+.lab-feedback-box.success {
+  background: rgba(65, 150, 101, 0.13) !important;
+  border: 1px solid rgba(104, 201, 154, 0.45) !important;
+}
+
+.lab-feedback-box.error {
+  background: rgba(180, 62, 76, 0.13) !important;
+  border: 1px solid rgba(226, 124, 130, 0.45) !important;
+}
+
+.lab-feedback-title {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-bottom: 10px !important;
+}
+
+.lab-feedback-title strong {
+  font-size: 15px !important;
+}
+
+.lab-feedback-icon {
+  display: flex !important;
+  flex-shrink: 0 !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 50% !important;
+  font-weight: 900 !important;
+}
+
+.lab-feedback-box.success .lab-feedback-icon {
+  background: #68c99a !important;
+  color: #102a1c !important;
+}
+
+.lab-feedback-box.error .lab-feedback-icon {
+  background: #e27c82 !important;
+  color: #351218 !important;
+}
+
+.lab-feedback-box p {
+  margin: 0 !important;
+  line-height: 1.8 !important;
+  font-size: 14px !important;
+}
+
+/* Botão de ação */
+
+.lab-question-actions {
+  width: 100% !important;
+  margin-top: 22px !important;
+}
+
+.lab-question-actions .laboratory-primary-button {
+  width: 100% !important;
+  min-height: 52px !important;
+  border-radius: 12px !important;
+  font-size: 13px !important;
+  font-weight: 900 !important;
+  letter-spacing: 1px !important;
+  transition: all 0.2s ease !important;
+}
+
+.lab-question-actions .laboratory-primary-button:disabled {
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+.lab-question-actions .laboratory-primary-button:not(:disabled):hover {
+  transform: translateY(-2px) !important;
+}
+
+/* ==========================================
+   RESPONSIVIDADE
+   ========================================== */
+
+@media (max-width: 600px) {
+  .lab-question-layout {
+    width: 100% !important;
+    padding: 16px !important;
+  }
+
+  .lab-question-card {
+    padding: 17px !important;
+  }
+
+  .lab-question-heading h3 {
+    font-size: 18px !important;
+  }
+
+  .lab-question-text {
+    font-size: 14px !important;
+  }
+
+  .lab-answer-option {
+    min-height: 60px !important;
+    padding: 12px !important;
+    gap: 12px !important;
+  }
+
+  .lab-answer-letter {
+    flex-basis: 34px !important;
+    width: 34px !important;
+    min-width: 34px !important;
+    max-width: 34px !important;
+    height: 34px !important;
+  }
+
+  .lab-answer-text {
+    font-size: 14px !important;
+  }
+}
+/* =========================================
+   CORREÇÃO DEFINITIVA DO LABORATÓRIO
+   ========================================= */
+
+.laboratory-scene {
+  width: 100% !important;
+  min-height: 100vh !important;
+  height: auto !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  padding: 40px 20px !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+}
+
+.laboratory-console,
+.laboratory-console-compact {
+  width: 100% !important;
+  max-width: 760px !important;
+  min-width: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  margin: 0 auto !important;
+  padding: 32px !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+}
+
+/* Cabeçalho */
+.laboratory-header {
+  width: 100% !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: 15px !important;
+}
+
+/* Área da pergunta */
+.laboratory-challenge {
+  width: 100% !important;
+  overflow: visible !important;
+}
+
+.laboratory-challenge h3 {
+  margin-bottom: 18px !important;
+  line-height: 1.4 !important;
+}
+
+.laboratory-challenge p {
+  line-height: 1.7 !important;
+  overflow-wrap: break-word !important;
+}
+
+/* Alternativas */
+.laboratory-options {
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  margin-top: 24px !important;
+}
+
+.laboratory-option {
+  width: 100% !important;
+  min-height: 64px !important;
+  height: auto !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 14px !important;
+  padding: 14px 18px !important;
+  text-align: left !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+}
+
+.laboratory-option span:last-child {
+  display: block !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+  width: auto !important;
+  overflow: visible !important;
+  white-space: normal !important;
+  word-break: normal !important;
+  overflow-wrap: anywhere !important;
+  line-height: 1.5 !important;
+}
+
+/* Letras A, B, C */
+.laboratory-option-letter {
+  flex: 0 0 42px !important;
+  width: 42px !important;
+  min-width: 42px !important;
+  height: 42px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Botão analisar / próximo desafio */
+.laboratory-actions {
+  width: 100% !important;
+  display: flex !important;
+  justify-content: flex-start !important;
+  margin-top: 24px !important;
+  padding-bottom: 8px !important;
+  overflow: visible !important;
+}
+
+.laboratory-primary-button {
+  display: inline-flex !important;
+  width: auto !important;
+  min-width: 210px !important;
+  min-height: 52px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 14px 24px !important;
+  margin: 0 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  overflow: visible !important;
+}
+
+/* Não cortar o conteúdo */
+.laboratory-scene *,
+.laboratory-console *,
+.laboratory-console-compact * {
+  box-sizing: border-box !important;
+}
+
+/* Desktop */
+@media (min-width: 900px) {
+  .laboratory-scene {
+    padding-top: 50px !important;
+  }
+
+  .laboratory-console,
+  .laboratory-console-compact {
+    max-width: 760px !important;
+  }
+}
+
+/* Celular */
+@media (max-width: 600px) {
+  .laboratory-scene {
+    padding: 12px !important;
+  }
+
+  .laboratory-console,
+  .laboratory-console-compact {
+    padding: 18px !important;
+  }
+
+  .laboratory-option {
+    min-height: 60px !important;
+    padding: 12px !important;
+    gap: 10px !important;
+  }
+
+  .laboratory-option-letter {
+    flex-basis: 36px !important;
+    width: 36px !important;
+    min-width: 36px !important;
+    height: 36px !important;
+  }
+}
+/* ==========================================
+   OPERAÇÃO LOVELACE — CENTRAL DE DECODIFICAÇÃO
+   CORREÇÃO DO LAYOUT E DAS ALTERNATIVAS
+   ========================================== */
+
+.central-screen {
+  width: 100% !important;
+  min-height: 100vh !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  padding: 30px !important;
+  overflow: auto !important;
+  box-sizing: border-box !important;
+}
+
+.central-stage {
+  width: 100% !important;
+  max-width: 1000px !important;
+  margin: 0 auto !important;
+  overflow: visible !important;
+}
+
+.central-scene {
+  width: 100% !important;
+  min-height: 0 !important;
+  height: auto !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: flex-start !important;
+  padding: 30px !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+}
+
+.central-console {
+  width: 100% !important;
+  max-width: 720px !important;
+  min-width: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  margin: 0 auto !important;
+  padding: 30px !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+}
+
+/* Progresso */
+.central-progress {
+  width: 100% !important;
+  margin: 20px 0 !important;
+}
+
+.central-progress .progress-track {
+  width: 100% !important;
+  overflow: hidden !important;
+}
+
+/* Código a decifrar */
+.central-code {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 20px !important;
+  margin: 18px 0 !important;
+  text-align: center !important;
+  overflow-wrap: anywhere !important;
+  box-sizing: border-box !important;
+}
+
+/* Área de alternativas */
+.central-options {
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  margin: 24px 0 !important;
+}
+
+/* Botões das respostas */
+.central-option {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 64px !important;
+  height: auto !important;
+
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+
+  gap: 14px !important;
+  padding: 16px 20px !important;
+
+  box-sizing: border-box !important;
+  overflow: visible !important;
+
+  white-space: normal !important;
+  text-align: left !important;
+  line-height: 1.5 !important;
+}
+
+/* Elementos internos dos botões */
+.central-option * {
+  box-sizing: border-box !important;
+  position: static !important;
+  float: none !important;
+  transform: none !important;
+}
+
+/* Texto da alternativa */
+.central-option span,
+.central-option p {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  width: auto !important;
+  height: auto !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  white-space: normal !important;
+  overflow: visible !important;
+  overflow-wrap: break-word !important;
+
+  line-height: 1.5 !important;
+}
+
+/* Alternativa selecionada */
+.central-option.selected {
+  border: 2px solid #e9c46a !important;
+  background: #382344 !important;
+}
+
+/* Feedback */
+.central-feedback {
+  width: 100% !important;
+  height: auto !important;
+  padding: 18px !important;
+  margin-top: 18px !important;
+  overflow: visible !important;
+}
+
+/* Botões de ação */
+.central-console button.start-button,
+.central-console button.close-button {
+  min-height: 48px !important;
+  height: auto !important;
+  width: auto !important;
+  max-width: 100% !important;
+  padding: 12px 22px !important;
+  white-space: normal !important;
+}
+
+/* Evita cortes */
+.central-console,
+.central-console * {
+  box-sizing: border-box !important;
+}
+
+/* Celular */
+@media (max-width: 600px) {
+  .central-screen {
+    padding: 12px !important;
+  }
+
+  .central-scene {
+    padding: 12px !important;
+  }
+
+  .central-console {
+    padding: 18px !important;
+  }
+
+  .central-option {
+    min-height: 58px !important;
+    padding: 12px !important;
+    gap: 10px !important;
+  }
+}
