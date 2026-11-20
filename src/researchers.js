@@ -1,3 +1,7 @@
+// ==========================================
+// DOSSIÊ 001 — NINA DA HORA
+// ==========================================
+
 const ninaDaHora = {
   id: "nina-da-hora",
   name: "Nina da Hora",
@@ -88,7 +92,7 @@ Mas atenção... uma nova pista acaba de chegar. Nossa investigação está apen
       ada: "Um documento foi protegido com números. Cada número corresponde à posição de uma letra no alfabeto. Decifre a mensagem!",
 
       question:
-        "Use A=1, B=2, C=3 ... Z=26 para decifrar:", 
+        "Use A=1, B=2, C=3 ... Z=26 para decifrar:",
 
       cipher: "4 - 1 - 4 - 15 - 19",
 
@@ -229,6 +233,253 @@ Mas atenção... uma nova pista acaba de chegar. Nossa investigação está apen
   ]
 };
 
-const researchers = [ninaDaHora];
+
+// ==========================================
+// DOSSIÊ 002 — TERESA LUDERMIR
+// ==========================================
+
+const teresaLudermir = {
+  id: "teresa-ludermir",
+  name: "Teresa Ludermir",
+  institution: "Universidade Federal de Pernambuco (UFPE)",
+  area: "Inteligência Artificial, aprendizado de máquina e redes neurais artificiais",
+
+  description:
+    "Pesquisadora brasileira pioneira em Inteligência Artificial e Redes Neurais Artificiais, com pesquisas voltadas ao aprendizado de máquinas e aplicações em problemas reais.",
+
+  intro: `Detetive, temos um novo mistério!
+
+Descobri pistas sobre uma cientista brasileira que dedica sua vida a ensinar máquinas a aprender.
+
+Imagine computadores capazes de reconhecer padrões, fazer previsões e até ajudar a identificar problemas antes que se tornem perigosos!
+
+Mas quem está por trás dessas pesquisas?
+
+Espalhei oito pistas pela cidade. Decifre os códigos, resolva os desafios e descubra a identidade dessa pesquisadora!
+
+Preparada para começar o Dossiê 002?`,
+
+  finalMessage: `Excelente trabalho, detetive!
+
+Você descobriu Teresa Ludermir, uma cientista brasileira pioneira em Inteligência Artificial e Redes Neurais Artificiais.
+
+Suas pesquisas ajudam computadores a aprender com dados e contribuem para resolver problemas reais, como analisar a qualidade da água e fazer previsões.
+
+Em 2024, ela passou a integrar a Academia Brasileira de Ciências!
+
+Mais uma história recuperada! Mas ainda existem cientistas esperando para serem descobertas...`,
+
+  challenges: [
+    // DESAFIO 1 — BIBLIOTECA
+    {
+      id: 1,
+      location: "library",
+      type: "quiz",
+      title: "O segredo das máquinas",
+
+      ada: "Encontrei um documento sobre máquinas que aprendem com exemplos. Qual tecnologia permite que computadores identifiquem padrões a partir de dados?",
+
+      question:
+        "Qual tecnologia permite que computadores identifiquem padrões a partir de dados?",
+
+      options: [
+        "Aprendizado de Máquina",
+        "Armazenamento em Nuvem",
+        "Computação Gráfica"
+      ],
+
+      answer: 0,
+
+      clue:
+        "Nossa cientista pesquisa maneiras de fazer computadores aprenderem com dados.",
+
+      success:
+        "Correto! O Aprendizado de Máquina permite que computadores identifiquem padrões a partir de dados."
+    },
+
+    // DESAFIO 2 — BIBLIOTECA
+    {
+      id: 2,
+      location: "library",
+      type: "caesar",
+      title: "A mensagem do cérebro artificial",
+
+      ada: "O documento menciona uma tecnologia inspirada no funcionamento do cérebro humano. A palavra foi criptografada! Cada letra avançou uma posição no alfabeto.",
+
+      question:
+        "Volte uma letra no alfabeto para descobrir a palavra.",
+
+      cipher: "S F E F T",
+
+      answer: "REDES",
+
+      clue:
+        "Redes neurais artificiais são uma das principais áreas de pesquisa da cientista.",
+
+      success:
+        "Muito bem! Redes neurais artificiais são inspiradas no funcionamento do cérebro humano e permitem que sistemas aprendam padrões."
+    },
+
+    // DESAFIO 3 — MUSEU
+    {
+      id: 3,
+      location: "museum",
+      type: "quiz",
+      title: "A água sob investigação",
+
+      ada: "Um sistema inteligente está ajudando pesquisadores a analisar informações sobre a qualidade da água. Como redes neurais podem contribuir para essa tarefa?",
+
+      question:
+        "Como as redes neurais podem ajudar nessa investigação?",
+
+      options: [
+        "Identificando padrões nos dados para apoiar análises e previsões.",
+        "Transformando automaticamente água contaminada em água potável.",
+        "Substituindo a coleta de dados por resultados sem medições."
+      ],
+
+      answer: 0,
+
+      clue:
+        "As pesquisas da cientista têm aplicações em problemas ambientais.",
+
+      success:
+        "Correto! Redes neurais podem identificar padrões e ajudar pesquisadores a analisar informações e realizar previsões."
+    },
+
+    // DESAFIO 4 — MUSEU
+    {
+      id: 4,
+      location: "museum",
+      type: "code",
+      title: "O arquivo numérico",
+
+      ada: "Uma nova palavra está escondida neste registro. Cada número corresponde à posição de uma letra no alfabeto. Descubra o que as máquinas precisam analisar para aprender.",
+
+      question:
+        "Use A=1, B=2, C=3 ... Z=26 para decifrar a mensagem:",
+
+      cipher: "4 - 1 - 4 - 15 - 19",
+
+      answer: "DADOS",
+
+      clue:
+        "As redes neurais podem aprender padrões a partir de exemplos presentes nos dados.",
+
+      success:
+        "Mensagem decifrada: DADOS! Eles são fundamentais para que as redes neurais aprendam padrões."
+    },
+
+    // DESAFIO 5 — LABORATÓRIO
+    {
+      id: 5,
+      location: "laboratory",
+      type: "quiz",
+      title: "O centro das descobertas",
+
+      ada: "Descobri que nossa cientista desenvolve suas pesquisas em uma universidade pública do Nordeste brasileiro, localizada em Recife. Qual é essa instituição?",
+
+      question:
+        "Em qual instituição nossa cientista desenvolve suas pesquisas?",
+
+      options: [
+        "Universidade Federal do Ceará (UFC)",
+        "Universidade Federal de Pernambuco (UFPE)",
+        "Universidade Federal da Paraíba (UFPB)"
+      ],
+
+      answer: 1,
+
+      clue:
+        "Nossa pesquisadora é professora titular do Centro de Informática da UFPE.",
+
+      success:
+        "Isso mesmo! Teresa Ludermir é professora titular do Centro de Informática da Universidade Federal de Pernambuco."
+    },
+
+    // DESAFIO 6 — LABORATÓRIO
+    {
+      id: 6,
+      location: "laboratory",
+      type: "scramble",
+      title: "A cidade secreta",
+
+      ada: "Encontramos o nome da cidade onde nossa cientista desenvolve suas pesquisas, mas as letras estão embaralhadas. Consegue reorganizá-las?",
+
+      question:
+        "Organize as seis letras para descobrir a cidade.",
+
+      cipher: "F E C E R I",
+
+      answer: "RECIFE",
+
+      clue:
+        "Nossa cientista trabalha na capital pernambucana.",
+
+      success:
+        "Correto! A cidade é Recife, onde está localizada a Universidade Federal de Pernambuco."
+    },
+
+    // DESAFIO 7 — CENTRAL
+    {
+      id: 7,
+      location: "central",
+      type: "caesar",
+      title: "O primeiro nome",
+
+      ada: "Estamos quase lá, detetive! Encontrei um registro com o primeiro nome da cientista, mas as letras foram avançadas uma posição no alfabeto. Decifre!",
+
+      question:
+        "Volte uma letra no alfabeto para descobrir o primeiro nome.",
+
+      cipher: "U F S F T B",
+
+      answer: "TERESA",
+
+      clue:
+        "Já sabemos seu primeiro nome. Precisamos encontrar a identidade completa!",
+
+      success:
+        "Código decifrado: TERESA! Agora falta confirmar sua identidade completa."
+    },
+
+    // DESAFIO 8 — CENTRAL
+    {
+      id: 8,
+      location: "central",
+      type: "quiz",
+      title: "A identidade revelada",
+
+      ada: "Encontramos a última evidência! Nossa cientista é professora titular da UFPE, pioneira em pesquisas sobre redes neurais artificiais e tornou-se membro titular da Academia Brasileira de Ciências em 2024. Quem é ela?",
+
+      question:
+        "Quem é a pesquisadora?",
+
+      options: [
+        "Teresa Cristina da Silva",
+        "Teresa Bernarda Ludermir",
+        "Teresa Maria de Souza"
+      ],
+
+      answer: 1,
+
+      clue:
+        "Identidade confirmada: Teresa Bernarda Ludermir!",
+
+      success:
+        "Identidade confirmada: Teresa Bernarda Ludermir! Caso solucionado, detetive!"
+    }
+  ]
+};
+
+
+// ==========================================
+// EXPORTAÇÃO DOS DOSSIÊS
+// ==========================================
+
+const researchers = [
+  ninaDaHora,
+  teresaLudermir
+];
 
 export default researchers;

@@ -22,36 +22,84 @@ const PLACE_NAMES = {
 
 export default function App() {
   const [screen, setScreen] = useState("home");
-  const [researcher] = useState(researchers[0]);
+
+  // CONTROLADOR DOS DOSSIÊS
+  const [researcherIndex, setResearcherIndex] = useState(0);
+
+  const researcher = researchers[researcherIndex];
+  const caseNumber = String(researcherIndex + 1).padStart(3, "0");
+
+  const hasNextCase = researcherIndex < researchers.length - 1;
+
   const [clues, setClues] = useState([]);
   const [completedPlaces, setCompletedPlaces] = useState([]);
+
   const [journalOpen, setJournalOpen] = useState(false);
   const [introOpen, setIntroOpen] = useState(false);
   const [finalOpen, setFinalOpen] = useState(false);
 
   const challenges = researcher.challenges;
   const totalChallenges = challenges.length;
+
   const completedChallenges = clues.length;
   const caseFinished = completedChallenges === totalChallenges;
 
-  // Abre a mensagem final quando todas as pistas forem recuperadas
-  // e a Central estiver concluída.
+  // ABRE A MENSAGEM FINAL QUANDO O CASO É CONCLUÍDO
   useEffect(() => {
     if (caseFinished && completedPlaces.includes("central")) {
       setFinalOpen(true);
     }
   }, [caseFinished, completedPlaces]);
 
+  // INICIA UMA NOVA INVESTIGAÇÃO PELO PRIMEIRO DOSSIÊ
   function beginCase() {
+    setResearcherIndex(0);
+
     setClues([]);
     setCompletedPlaces([]);
+
     setJournalOpen(false);
     setFinalOpen(false);
+    setIntroOpen(true);
+
+    setScreen("city");
+  }
+
+  // INICIA O PRÓXIMO DOSSIÊ
+  function startNextCase() {
+    if (!hasNextCase) {
+      finishInvestigation();
+      return;
+    }
+
+    setResearcherIndex((previous) => previous + 1);
+
+    // ZERA O PROGRESSO DO CASO ANTERIOR
+    setClues([]);
+    setCompletedPlaces([]);
+
+    setJournalOpen(false);
+    setFinalOpen(false);
+
+    // ABRE A INTRODUÇÃO DA NOVA PESQUISADORA
     setIntroOpen(true);
     setScreen("city");
   }
 
-  // Registra as pistas sem duplicá-las.
+  // ENCERRA A INVESTIGAÇÃO COMPLETA
+  function finishInvestigation() {
+    setFinalOpen(false);
+    setIntroOpen(false);
+    setJournalOpen(false);
+
+    setResearcherIndex(0);
+    setClues([]);
+    setCompletedPlaces([]);
+
+    setScreen("home");
+  }
+
+  // REGISTRA AS PISTAS SEM DUPLICÁ-LAS
   function saveClue(clue) {
     if (!clue || clue.id === undefined || clue.id === null) return;
 
@@ -62,7 +110,7 @@ export default function App() {
     );
   }
 
-  // Marca o local como concluído e retorna para a cidade.
+  // MARCA O LOCAL COMO CONCLUÍDO
   function completePlace(place) {
     setCompletedPlaces((previous) =>
       previous.includes(place) ? previous : [...previous, place]
@@ -75,7 +123,7 @@ export default function App() {
     setScreen("city");
   }
 
-  // Envia os mesmos dados e funções para todos os locais.
+  // ENVIA OS DADOS PARA OS CENÁRIOS
   function renderScene() {
     const props = {
       researcher,
@@ -93,7 +141,10 @@ export default function App() {
     return null;
   }
 
+  // ==========================================
   // TELA INICIAL
+  // ==========================================
+
   if (screen === "home") {
     return (
       <main className="home-screen">
@@ -122,12 +173,18 @@ export default function App() {
     );
   }
 
+  // ==========================================
   // TELAS DOS LOCAIS
+  // ==========================================
+
   if (screen !== "city") {
     return renderScene();
   }
 
+  // ==========================================
   // MAPA DA CIDADE
+  // ==========================================
+
   return (
     <div className="app">
       <main className="game-screen">
@@ -137,7 +194,9 @@ export default function App() {
               ARQUIVO DE INVESTIGAÇÃO · OPERAÇÃO LOVELACE
             </span>
 
-            <h2>DOSSIÊ 001 — NINA DA HORA</h2>
+            <h2>
+              DOSSIÊ {caseNumber} — {researcher.name.toUpperCase()}
+            </h2>
           </div>
 
           <button
@@ -175,7 +234,9 @@ export default function App() {
                   <span
                     key={challenge.id}
                     className={`campaign-progress-segment ${
-                      clues.some((c) => c.id === challenge.id) ? "complete" : ""
+                      clues.some((c) => c.id === challenge.id)
+                        ? "complete"
+                        : ""
                     }`}
                     title={`Desafio ${challenge.id}`}
                   />
@@ -199,8 +260,8 @@ export default function App() {
               <span>OBJETIVO DA INVESTIGAÇÃO</span>
 
               <strong>
-                Explore os locais, resolva os oito desafios e descubra quem é a
-                pesquisadora.
+                Explore os locais, resolva os oito desafios e descubra quem é
+                a pesquisadora.
               </strong>
             </div>
 
@@ -243,7 +304,7 @@ export default function App() {
               >
                 <strong>CASO SOLUCIONADO!</strong>
 
-                <p>Identidade confirmada: Nina da Hora.</p>
+                <p>Identidade confirmada: {researcher.name}.</p>
 
                 <button
                   className="start-button"
@@ -259,8 +320,8 @@ export default function App() {
         {/* CONTROLES */}
         <div className="city-controls">
           <span>
-            Explore os locais e conclua os desafios · Progresso {completedChallenges}/
-            {totalChallenges}
+            Explore os locais e conclua os desafios · Progresso{" "}
+            {completedChallenges}/{totalChallenges}
           </span>
 
           <button
@@ -272,7 +333,10 @@ export default function App() {
         </div>
       </main>
 
-      {/* INTRODUÇÃO */}
+      {/* ======================================
+          INTRODUÇÃO DO DOSSIÊ
+      ====================================== */}
+
       {introOpen && (
         <div className="modal-overlay intro-overlay">
           <section className="intro-card">
@@ -282,11 +346,15 @@ export default function App() {
             />
 
             <div>
-              <span className="eyebrow">MISSÃO INICIADA · CASO 01</span>
+              <span className="eyebrow">
+                MISSÃO INICIADA · DOSSIÊ {caseNumber}
+              </span>
 
               <h2>Olá, detetive!</h2>
 
-              <p style={{ whiteSpace: "pre-line" }}>{researcher.intro}</p>
+              <p style={{ whiteSpace: "pre-line" }}>
+                {researcher.intro}
+              </p>
 
               <button
                 className="start-button"
@@ -299,7 +367,10 @@ export default function App() {
         </div>
       )}
 
-      {/* CADERNO DE INVESTIGAÇÃO */}
+      {/* ======================================
+          CADERNO DE INVESTIGAÇÃO
+      ====================================== */}
+
       {journalOpen && (
         <div className="modal-overlay journal-overlay">
           <div className="journal-modal journal-redesign">
@@ -318,7 +389,9 @@ export default function App() {
 
               <h2>Caderno de investigação</h2>
 
-              <p>CASO 001 · NINA DA HORA</p>
+              <p>
+                DOSSIÊ {caseNumber} · {researcher.name.toUpperCase()}
+              </p>
             </header>
 
             <section className="journal-overview">
@@ -331,7 +404,9 @@ export default function App() {
                 <div
                   className="journal-progress-fill"
                   style={{
-                    width: `${(completedChallenges / totalChallenges) * 100}%`,
+                    width: `${
+                      (completedChallenges / totalChallenges) * 100
+                    }%`,
                   }}
                 />
               </div>
@@ -379,7 +454,7 @@ export default function App() {
                 </div>
 
                 <span className="journal-section-count">
-                  {completedChallenges}/8
+                  {completedChallenges}/{totalChallenges}
                 </span>
               </div>
 
@@ -438,7 +513,10 @@ export default function App() {
         </div>
       )}
 
-      {/* MENSAGEM FINAL DA ADA */}
+      {/* ======================================
+          MENSAGEM FINAL DA ADA
+      ====================================== */}
+
       {finalOpen && caseFinished && (
         <div className="modal-overlay">
           <div className="dialogue-modal">
@@ -449,24 +527,33 @@ export default function App() {
             />
 
             <div className="dialogue-content">
-              <span className="eyebrow">ADA • CASO SOLUCIONADO</span>
+              <span className="eyebrow">
+                ADA · DOSSIÊ {caseNumber} SOLUCIONADO
+              </span>
 
-              <h2>Nina da Hora</h2>
+              <h2>{researcher.name}</h2>
 
               <p style={{ whiteSpace: "pre-line" }}>
                 {researcher.finalMessage}
               </p>
 
               <div className="modal-actions">
-                <button
-                  className="start-button"
-                  onClick={() => {
-                    setFinalOpen(false);
-                    setScreen("home");
-                  }}
-                >
-                  ENCERRAR INVESTIGAÇÃO
-                </button>
+                {hasNextCase ? (
+                  <button
+                    className="start-button"
+                    onClick={startNextCase}
+                  >
+                    INICIAR DOSSIÊ{" "}
+                    {String(researcherIndex + 2).padStart(3, "0")} →
+                  </button>
+                ) : (
+                  <button
+                    className="start-button"
+                    onClick={finishInvestigation}
+                  >
+                    ENCERRAR INVESTIGAÇÃO
+                  </button>
+                )}
 
                 <button
                   className="close-button"
